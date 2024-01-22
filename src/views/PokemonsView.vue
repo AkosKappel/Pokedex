@@ -38,14 +38,14 @@ onMounted(async () => {
   const initialPage = parseInt(urlParams.get('page') || '1', 10);
   currentPage.value = initialPage;
   await fetchPage(initialPage);
-});
 
-watch(currentPage, (newPage, oldPage) => {
-  if (newPage !== oldPage) {
-    data.value = null; // reset data to show loading widget
-    console.log('currentPage changed from', oldPage, 'to', newPage);
-    fetchPage(newPage);
-  }
+  // start watching for page changes after initial page is loaded
+  watch(currentPage, (newPage, oldPage) => {
+    if (newPage !== oldPage) {
+      data.value = null; // reset data to show loading widget
+      fetchPage(newPage);
+    }
+  });
 });
 
 const fetchPage = async (page: number, perPage: number = PER_PAGE) => {
@@ -56,7 +56,6 @@ const fetchPage = async (page: number, perPage: number = PER_PAGE) => {
 
   try {
     const response = await axios.get(`${POKEMON_API_URL}?offset=${(page - 1) * perPage}&limit=${perPage}`);
-    console.log('fetched data', response.data);
     data.value = response.data;
     totalPages.value = Math.ceil(response.data.count / response.data.results.length);
     history.pushState(null, '', `?page=${page}`);
