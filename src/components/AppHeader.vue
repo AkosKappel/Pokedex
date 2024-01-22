@@ -1,12 +1,14 @@
 <template>
   <header>
     <h1>
-      <router-link to="/">{{ title }}</router-link>
+      <router-link to="/">{{ props.title }}</router-link>
     </h1>
     <nav>
       <ul>
-        <li><router-link to="/">Home</router-link></li> |
-        <li><router-link to="/pokemons">Pokémons</router-link></li> |
+        <li><router-link to="/">Home</router-link></li>
+        |
+        <li><router-link to="/pokemons">Pokémons</router-link></li>
+        |
         <li><router-link to="/about">About</router-link></li>
       </ul>
     </nav>
@@ -14,7 +16,11 @@
 </template>
 
 <script setup lang="ts">
-const title = 'Pokédex';
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  title: String,
+});
 </script>
 
 <style scoped>

@@ -1,13 +1,15 @@
 <template>
   <ul class="pokemon-list">
-    <li v-for="pokemon in pokemons" :key="pokemon.id" class="pokemon-list-item" @click="onPokemonClick(pokemon)">
-      <h3 class="pokemon-list-item-name">
-        {{ pokemon.name }}<span> #{{ pokemon.id }}</span>
-      </h3>
-      <div class="pokemon-list-item-image">
-        <img :src="pokemon.image" :alt="pokemon.name" @error="onImageError" />
-      </div>
-    </li>
+    <router-link :to="`/pokemon/${pokemon.id}`" v-for="pokemon in pokemons" :key="pokemon.id">
+      <li class="pokemon-list-item">
+        <h3 class="pokemon-list-item-name">
+          {{ pokemon.name }}<span> #{{ pokemon.id.padStart(3, '0') }}</span>
+        </h3>
+        <div class="pokemon-list-item-image">
+          <img :src="pokemon.image" :alt="pokemon.name" @error="onImageError" />
+        </div>
+      </li>
+    </router-link>
   </ul>
 </template>
 
@@ -34,7 +36,7 @@ const props = defineProps({
 const transformPokemon = (pokemon: any): Pokemon => {
   const id = pokemon.url.split('/').slice(-2, -1)[0];
   return {
-    id: id.padStart(3, '0'),
+    id,
     ...pokemon,
     image: `${POKEMON_IMAGE_URL}${id}.png`,
   };
@@ -42,22 +44,24 @@ const transformPokemon = (pokemon: any): Pokemon => {
 
 const pokemons: Pokemon[] = props.pokemons.map(transformPokemon);
 
-const onPokemonClick = (pokemon: Pokemon) => {
-  console.log('clicked pokemon', pokemon);
-};
-
 const onImageError = (event: any) => {
   event.target.src = require('@/assets/pokeball.png');
 };
 </script>
 
 <style scoped>
+/* remove router-link decoration */
+a {
+  text-decoration: none;
+}
+
 .pokemon-list {
   list-style: none;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  min-height: 100vh;
 }
 
 .pokemon-list-item {
@@ -91,7 +95,7 @@ const onImageError = (event: any) => {
 }
 
 .pokemon-list-item-name:hover {
-  color: #f00;
+  color: #f1c40f;
 }
 
 .pokemon-list-item-name span {

@@ -1,12 +1,16 @@
 <template>
   <div id="app">
-    <AppHeader />
-    <router-view/>
+    <AppHeader :title="name" />
+    <router-view />
+    <AppFooter :title="name" />
   </div>
 </template>
 
 <script setup lang="ts">
 import AppHeader from '@/components/AppHeader.vue';
+import AppFooter from '@/components/AppFooter.vue';
+
+const name = 'Pokédex';
 </script>
 
 <style>

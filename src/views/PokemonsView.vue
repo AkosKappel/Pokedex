@@ -22,6 +22,7 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref, watch, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import LoadingWidget from '@/components/LoadingWidget.vue';
 import PokemonList from '@/components/PokemonList.vue';
 import SideNavigation from '@/components/SideNavigation.vue';
@@ -29,13 +30,13 @@ import SideNavigation from '@/components/SideNavigation.vue';
 const POKEMON_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
 const PER_PAGE = 20;
 
+const router = useRouter();
 const currentPage = ref<number>(1);
 const totalPages = ref<number>(15);
 const data = ref<any>(null);
 
 onMounted(async () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const initialPage = parseInt(urlParams.get('page') || '1', 10);
+  const initialPage = parseInt((router.currentRoute.value.query.page as string) || '1', 10);
   currentPage.value = initialPage;
   await fetchPage(initialPage);
 
@@ -58,7 +59,7 @@ const fetchPage = async (page: number, perPage: number = PER_PAGE) => {
     const response = await axios.get(`${POKEMON_API_URL}?offset=${(page - 1) * perPage}&limit=${perPage}`);
     data.value = response.data;
     totalPages.value = Math.ceil(response.data.count / response.data.results.length);
-    history.pushState(null, '', `?page=${page}`);
+    router.push({ query: { page } });
   } catch (error) {
     console.error('Error fetching data:', error);
   }
