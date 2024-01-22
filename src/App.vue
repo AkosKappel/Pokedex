@@ -20,6 +20,6 @@ import AppHeader from '@/components/AppHeader.vue';
 
 body {
   margin: 0;
-  background-color: #f5f5f5;
+  background-color: #f4f2de;
 }
 </style>

@@ -1,10 +1,12 @@
 <template>
   <header>
-    <h1>{{ title }}</h1>
+    <h1>
+      <router-link to="/">{{ title }}</router-link>
+    </h1>
     <nav>
       <ul>
         <li><router-link to="/">Home</router-link></li> |
-        <li><router-link to="/pokemon">Pokémon</router-link></li> |
+        <li><router-link to="/pokemons">Pokémons</router-link></li> |
         <li><router-link to="/about">About</router-link></li>
       </ul>
     </nav>
@@ -27,6 +29,13 @@ h1 {
   margin: 0.5rem;
   color: #f1c40f;
   font-size: 2.2r em;
+  cursor: pointer;
+}
+
+/* remove router-link decorations */
+h1 a {
+  color: #f1c40f;
+  text-decoration: none;
 }
 
 nav ul {
