@@ -56,4 +56,15 @@ body {
   background-color: #466483;
   color: #f1c40f;
 }
+
+@media (max-width: 768px) {
+  .pagination-container {
+    margin: 0.5rem 0 1rem 0;
+  }
+
+  .paginate-buttons {
+    height: 30px;
+    width: 30px;
+  }
+}
 </style>

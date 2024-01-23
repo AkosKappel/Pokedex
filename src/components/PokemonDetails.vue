@@ -19,7 +19,7 @@
               v-if="sprite && typeof sprite === 'string'"
               :src="sprite"
               :alt="`${key} ${pokemon.name}`"
-              :title="`${key} ${pokemon.name}`"
+              :title="`${key}_${pokemon.name}`"
               @error="removeSprite"
             />
           </div>

@@ -12,7 +12,7 @@
       v-model="currentPage"
       :total-items="data.count"
       :items-per-page="POKEMONS_PER_PAGE"
-      :max-pages-shown="5"
+      :max-pages-shown="3"
       :hide-prev-next-when-ends="true"
       active-page-class="active-page"
     />
