@@ -14,11 +14,11 @@ const emits = defineEmits(['left', 'right']);
 const props = defineProps({
   showLeft: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   showRight: {
     type: Boolean,
-    default: false,
+    default: true,
   },
 });
 </script>

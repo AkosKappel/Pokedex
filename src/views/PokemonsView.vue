@@ -1,6 +1,6 @@
 <template>
   <LoadingWidget v-if="!data" />
-  <div v-else class="pokemon-container">
+  <div v-else>
     <PokemonList :pokemons="data.results ?? []" />
     <SideNavigation
       :showLeft="currentPage > 1"
@@ -32,7 +32,7 @@ const PER_PAGE = 20;
 
 const router = useRouter();
 const currentPage = ref<number>(1);
-const totalPages = ref<number>(15);
+const totalPages = ref<number>(10);
 const data = ref<any>(null);
 
 onMounted(async () => {
