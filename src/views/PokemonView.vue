@@ -25,10 +25,7 @@ import { useRoute, useRouter } from 'vue-router';
 import LoadingWidget from '@/components/LoadingWidget.vue';
 import PokemonDetails from '@/components/PokemonDetails.vue';
 import SideNavigation from '@/components/SideNavigation.vue';
-
-const POKEMON_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
-const POKEMON_IMAGE_URL =
-  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
+import { POKEMON_API_URL, POKEMON_IMAGE_URL } from '@/config/constants';
 
 const route = useRoute();
 const router = useRouter();

@@ -11,7 +11,7 @@
     <vue-awesome-paginate
       v-model="currentPage"
       :total-items="data.count"
-      :items-per-page="PER_PAGE"
+      :items-per-page="POKEMONS_PER_PAGE"
       :max-pages-shown="5"
       :hide-prev-next-when-ends="true"
       active-page-class="active-page"
@@ -26,9 +26,7 @@ import { useRouter } from 'vue-router';
 import LoadingWidget from '@/components/LoadingWidget.vue';
 import PokemonList from '@/components/PokemonList.vue';
 import SideNavigation from '@/components/SideNavigation.vue';
-
-const POKEMON_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
-const PER_PAGE = 20;
+import { POKEMON_API_URL, POKEMONS_PER_PAGE } from '@/config/constants';
 
 const router = useRouter();
 const currentPage = ref<number>(1);
@@ -49,7 +47,7 @@ onMounted(async () => {
   });
 });
 
-const fetchPage = async (page: number, perPage: number = PER_PAGE) => {
+const fetchPage = async (page: number, perPage: number = POKEMONS_PER_PAGE) => {
   if (page < 1 || page > totalPages.value) {
     console.warn('Invalid page number:', page);
     return;

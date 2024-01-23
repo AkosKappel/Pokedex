@@ -15,9 +15,7 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
-
-const POKEMON_IMAGE_URL =
-  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
+import { POKEMON_IMAGE_URL } from '@/config/constants';
 
 interface Pokemon {
   id: string;
