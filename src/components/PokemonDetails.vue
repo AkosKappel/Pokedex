@@ -249,7 +249,7 @@ const removeSprite = (event: any) => {
 .content {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-around;
   gap: 60px;
 }
@@ -267,6 +267,7 @@ const removeSprite = (event: any) => {
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 20px;
+  max-width: 40vw;
 }
 
 .sprites div img {
@@ -282,6 +283,7 @@ const removeSprite = (event: any) => {
   gap: 10px;
   min-width: 260px;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .detail {
@@ -301,12 +303,17 @@ const removeSprite = (event: any) => {
 @media (max-width: 768px) {
   .content {
     flex-direction: column;
+    align-items: center;
     gap: 20px;
   }
 
   .image-container {
     margin-right: 0;
     margin-bottom: 20px;
+  }
+
+  .sprites {
+    max-width: 100%;
   }
 }
 </style>
