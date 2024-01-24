@@ -20,13 +20,13 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, watch, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import LoadingWidget from '@/components/LoadingWidget.vue';
 import PokemonList from '@/components/PokemonList.vue';
 import SideNavigation from '@/components/SideNavigation.vue';
 import { POKEMON_API_URL, POKEMONS_PER_PAGE } from '@/config/constants';
+import { useFetch } from '@/utils/helpers';
 
 const router = useRouter();
 const currentPage = ref<number>(1);
@@ -54,9 +54,13 @@ const fetchPage = async (page: number, perPage: number = POKEMONS_PER_PAGE) => {
   }
 
   try {
-    const response = await axios.get(`${POKEMON_API_URL}?offset=${(page - 1) * perPage}&limit=${perPage}`);
-    data.value = response.data;
-    totalPages.value = Math.ceil(response.data.count / response.data.results.length);
+    const offset: number = (page - 1) * perPage;
+    const url = `${POKEMON_API_URL}?offset=${offset}&limit=${perPage}`;
+
+    const response = await useFetch(url);
+    data.value = response;
+    totalPages.value = Math.ceil(response.count / response.results.length);
+
     router.push({ query: { page } });
   } catch (error) {
     console.error('Error fetching data:', error);

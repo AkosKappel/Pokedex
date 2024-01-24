@@ -37,9 +37,9 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { POKEMON_API_URL, POKEMON_IMAGE_URL } from '@/config/constants';
+import { useFetch } from '@/utils/helpers';
 
 interface Pokemon {
   id: number;
@@ -54,10 +54,10 @@ onMounted(async () => await fetchRandomPokemons(3));
 const fetchRandomPokemons = async (n: number, min: number = 1, max: number = 151) => {
   const pokemonIds = Array.from({ length: n }, () => Math.floor(Math.random() * (max - min + 1)) + min);
   try {
-    const response = await Promise.all(pokemonIds.map(id => axios.get(`${POKEMON_API_URL}${id}`)));
+    const response = await Promise.all(pokemonIds.map(id => useFetch(`${POKEMON_API_URL}${id}`)));
     pokemons.value = response.map((res, index) => {
-      res.data.image = `${POKEMON_IMAGE_URL}${pokemonIds[index]}.png`;
-      return res.data;
+      res.image = `${POKEMON_IMAGE_URL}${pokemonIds[index]}.png`;
+      return res;
     });
   } catch (error) {
     console.error(error);

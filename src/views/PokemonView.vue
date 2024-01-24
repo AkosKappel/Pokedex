@@ -19,13 +19,13 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import LoadingWidget from '@/components/LoadingWidget.vue';
 import PokemonDetails from '@/components/PokemonDetails.vue';
 import SideNavigation from '@/components/SideNavigation.vue';
 import { POKEMON_API_URL, POKEMON_IMAGE_URL } from '@/config/constants';
+import { useFetch } from '@/utils/helpers';
 
 const route = useRoute();
 const router = useRouter();
@@ -40,9 +40,9 @@ const fetchPokemon = async (pokemonId: number) => {
     router.replace({ path: `/pokemon/${pokemonId}` }); // update URL with new pokemon id
     loading.value = true; // show loading widget
 
-    const response = await axios.get(`${POKEMON_API_URL}${pokemonId}`);
-    response.data.image = `${POKEMON_IMAGE_URL}${pokemonId}.png`;
-    pokemon.value = response.data;
+    const response = await useFetch(`${POKEMON_API_URL}${pokemonId}`);
+    response.image = `${POKEMON_IMAGE_URL}${pokemonId}.png`;
+    pokemon.value = response;
   } catch (error) {
     console.error(error);
     pokemon.value = null;
