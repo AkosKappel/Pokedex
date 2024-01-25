@@ -6,7 +6,7 @@
           {{ pokemon.name }}<span> #{{ pokemon.id.padStart(3, '0') }}</span>
         </h3>
         <div class="pokemon-list-item-image">
-          <img :src="pokemon.image" :alt="pokemon.name" @error="onImageError" />
+          <img :src="pokemon.image" :alt="pokemon.name" loading="lazy" @load="onImageLoad" @error="onImageError" />
         </div>
       </li>
     </router-link>
@@ -41,6 +41,10 @@ const transformPokemon = (pokemon: any): Pokemon => {
 };
 
 const pokemons: Pokemon[] = props.pokemons.map(transformPokemon);
+
+const onImageLoad = (event: any) => {
+  event.target.style.backgroundImage = 'none';
+};
 
 const onImageError = (event: any) => {
   event.target.src = require('@/assets/pokeball.png');
@@ -110,5 +114,11 @@ a {
   width: 100%;
   height: auto;
   cursor: pointer;
+  background-image: url('~@/assets/pokeball.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  min-height: 100px;
+  min-width: 100px;
 }
 </style>
