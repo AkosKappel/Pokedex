@@ -38,8 +38,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { POKEMON_API_URL, POKEMON_IMAGE_URL } from '@/config/constants';
-import { useFetch } from '@/utils/helpers';
+import { fetchPokemonById } from '@/utils/helpers';
 
 interface Pokemon {
   id: number;
@@ -54,11 +53,7 @@ onMounted(async () => await fetchRandomPokemons(3));
 const fetchRandomPokemons = async (n: number, min: number = 1, max: number = 151) => {
   const pokemonIds = Array.from({ length: n }, () => Math.floor(Math.random() * (max - min + 1)) + min);
   try {
-    const response = await Promise.all(pokemonIds.map(id => useFetch(`${POKEMON_API_URL}${id}`)));
-    pokemons.value = response.map((res, index) => {
-      res.image = `${POKEMON_IMAGE_URL}${pokemonIds[index]}.png`;
-      return res;
-    });
+    pokemons.value = await Promise.all(pokemonIds.map(id => fetchPokemonById(id)));
   } catch (error) {
     console.error(error);
   }

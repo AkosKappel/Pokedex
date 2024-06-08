@@ -118,7 +118,7 @@ a {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  min-height: 100px;
-  min-width: 100px;
+  min-width: 280px;
+  min-height: 280px;
 }
 </style>
