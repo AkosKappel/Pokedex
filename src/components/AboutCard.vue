@@ -27,6 +27,10 @@
       <a href="https://www.oracle.com/cloud/free/" target="_blank" rel="noopener noreferrer"> Oracle Cloud </a>
       VM instance.
     </p>
+    <p>
+      Check out the source code on
+      <a href="https://github.com/AkosKappel/Pokedex" target="_blank" rel="noopener noreferrer"> GitHub </a>
+    </p>
   </div>
 </template>
 

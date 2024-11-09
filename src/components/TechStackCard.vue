@@ -7,13 +7,22 @@
     </p>
     <ul>
       <li>
-        <a href="https://v3.vuejs.org/" target="_blank" rel="noopener noreferrer">Vue 3</a>
+        <a href="https://v3.vuejs.org/" target="_blank" rel="noopener noreferrer"
+          >Vue 3
+          <img src="/vue.svg" alt="Vue logo" class="svg-logo" />
+        </a>
       </li>
       <li>
-        <a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer">TypeScript</a>
+        <a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer"
+          >TypeScript
+          <img src="/typescript.svg" alt="TypeScript logo" class="svg-logo" />
+        </a>
       </li>
       <li>
-        <a href="https://www.docker.com/" target="_blank" rel="noopener noreferrer">Docker</a>
+        <a href="https://www.docker.com/" target="_blank" rel="noopener noreferrer"
+          >Docker
+          <img src="/docker.svg" alt="Docker logo" class="svg-logo" />
+        </a>
       </li>
     </ul>
   </div>
@@ -27,5 +36,9 @@ ul {
 
 li {
   margin-bottom: 0.75rem;
+}
+
+img {
+  margin-left: 0.5rem;
 }
 </style>

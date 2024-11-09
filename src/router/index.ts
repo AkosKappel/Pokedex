@@ -10,18 +10,23 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/pokemons',
     name: 'pokemons',
-    component: () => import('../views/PokemonsView.vue')
+    component: () => import('../views/PokemonsView.vue'),
   },
   {
     path: '/pokemon/:id',
     name: 'pokemon',
-    component: () => import('../views/PokemonView.vue')
+    component: () => import('../views/PokemonView.vue'),
+  },
+  {
+    path: '/items',
+    name: 'items',
+    component: () => import('../views/ItemsView.vue'),
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
-    component: () => import('../views/NotFoundView.vue')
-  }
+    component: () => import('../views/NotFoundView.vue'),
+  },
 ];
 
 const router = createRouter({
