@@ -36,7 +36,7 @@ const transformPokemon = (pokemon: any): Pokemon => {
   return {
     id,
     ...pokemon,
-    image: `${POKEMON_IMAGE_URL}${id}.png`,
+    image: `${POKEMON_IMAGE_URL}/${id}.png`, // add image to result because its not part of the API
   };
 };
 

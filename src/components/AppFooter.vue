@@ -17,7 +17,7 @@ const props = defineProps({
 <style scoped>
 .footer {
   background-color: #2c3e50;
-  padding: 20px 0;
+  padding: 24px 0;
   text-align: center;
 }
 

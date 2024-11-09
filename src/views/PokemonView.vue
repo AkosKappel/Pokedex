@@ -13,7 +13,7 @@
         @left="fetchPokemon(pokemonId - 1)"
         @right="fetchPokemon(pokemonId + 1)"
       />
-      <div class="back-button" @click="router.back()"></div>
+      <div class="back-button" @click="router.back()" title="Go back to previous page"></div>
     </div>
   </div>
 </template>

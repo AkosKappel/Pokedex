@@ -20,18 +20,24 @@ export const clearCache = () => {
 };
 
 export const fetchPokemonById = async (id: number) => {
-  const response = await useFetch(`${POKEMON_API_URL}${id}`);
-  response.image = `${POKEMON_IMAGE_URL}${id}.png`; // add image to result
+  const response = await useFetch(`${POKEMON_API_URL}/pokemon/${id}`);
+  response.image = `${POKEMON_IMAGE_URL}/${id}.png`; // add image to result
   return response;
 };
 
 export const fetchPokemonByName = async (name: string) => {
-  const response = await useFetch(`${POKEMON_API_URL}${name}`);
-  response.image = `${POKEMON_IMAGE_URL}${response.id}.png`;
+  const response = await useFetch(`${POKEMON_API_URL}/pokemon/${name}`);
+  response.image = `${POKEMON_IMAGE_URL}/${response.id}.png`;
   return response;
 };
 
 export const fetchPokemonList = async (limit: number, offset: number) => {
-  const response = await useFetch(`${POKEMON_API_URL}?limit=${limit}&offset=${offset}`);
+  const response = await useFetch(`${POKEMON_API_URL}/pokemon/?limit=${limit}&offset=${offset}`);
   return response;
-}
+};
+
+// TODO: implement items page
+export const fetchItemList = async (limit: number, offset: number) => {
+  const response = await useFetch(`${POKEMON_API_URL}/item/?limit=${limit}&offset=${offset}`);
+  return response;
+};

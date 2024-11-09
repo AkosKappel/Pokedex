@@ -18,12 +18,15 @@ div {
   align-items: center;
   justify-content: center;
   height: 80vh;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
 img {
-  width: auto;
-  height: 300px;
-  margin: 1rem;
+  width: 100%;
+  height: auto;
+  margin: 1rem 0;
 }
 
 h1 {
@@ -33,7 +36,7 @@ h1 {
 
 span {
   font-size: 1.2rem;
-  margin: 1rem;
+  margin: 1rem 0;
 }
 
 button {

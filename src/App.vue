@@ -1,9 +1,7 @@
 <template>
-  <div id="app">
-    <AppHeader :title="name" />
-    <router-view />
-    <AppFooter :title="name" />
-  </div>
+  <AppHeader :title="name" />
+  <router-view class="container" />
+  <AppFooter :title="name" />
 </template>
 
 <script setup lang="ts">
@@ -20,6 +18,11 @@ const name = 'Pokédex';
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #466483;
+}
+
+.container {
+  min-height: 90vh;
+  margin: 0 auto;
 }
 
 body {

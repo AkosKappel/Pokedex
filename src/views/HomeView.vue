@@ -1,37 +1,12 @@
 <template>
   <div class="content">
-    <div class="card about">
-      <h2>About</h2>
-      <p>
-        This is a simple Pokédex app built with Vue 3 and TypeScript. It uses the
-        <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer">PokéAPI</a> to fetch data about
-        pokemons.
-      </p>
-    </div>
-    <div class="card technologies">
-      <h2>Technologies</h2>
-      <p>
-        This app uses the following technologies:
-        <br />
-      </p>
-      <ul>
-        <li>
-          <a href="https://v3.vuejs.org/" target="_blank" rel="noopener noreferrer">Vue 3</a>
-        </li>
-        <li>
-          <a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer">TypeScript</a>
-        </li>
-      </ul>
-    </div>
-    <div v-for="pokemon in pokemons" :key="pokemon.name" class="card pokemon">
-      <router-link :to="{ name: 'pokemon', params: { id: pokemon.id } }">
-        <h2>
-          {{ pokemon.name }} <span>#{{ pokemon.id.toString().padStart(3, '0') }}</span>
-        </h2>
-        <div>
-          <img :src="pokemon.image" :alt="pokemon.name" />
-        </div>
-      </router-link>
+    <AboutCard />
+    <TechStackCard />
+
+    <div class="cards">
+      <div v-for="pokemon in pokemons" :key="pokemon.name" class="card pokemon">
+        <PokemonCard :pokemon="pokemon" />
+      </div>
     </div>
   </div>
 </template>
@@ -39,6 +14,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { fetchPokemonById } from '@/utils/helpers';
+import AboutCard from '@/components/AboutCard.vue';
+import TechStackCard from '@/components/TechStackCard.vue';
+import PokemonCard from '@/components/PokemonCard.vue';
 
 interface Pokemon {
   id: number;
@@ -60,7 +38,7 @@ const fetchRandomPokemons = async (n: number, min: number = 1, max: number = 151
 };
 </script>
 
-<style scoped>
+<style>
 .content {
   display: flex;
   flex-direction: row;
@@ -69,6 +47,15 @@ const fetchRandomPokemons = async (n: number, min: number = 1, max: number = 151
   align-items: flex-start;
   margin: 1rem auto;
   min-height: 80vh;
+}
+
+.cards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .card {
@@ -84,53 +71,22 @@ const fetchRandomPokemons = async (n: number, min: number = 1, max: number = 151
   width: 400px;
 }
 
-.card.about,
-.card.technologies {
-  width: 100%;
-  max-width: 600px;
-}
-
-.card.technologies ul {
-  list-style: none;
-  padding: 0;
-}
-
-.card.technologies ul li {
-  margin-bottom: 0.5rem;
-}
-
 .card a {
   text-decoration: none;
   color: #ecb64b;
+}
+
+.card a:hover {
+  text-decoration: underline;
 }
 
 .card a:visited {
   color: #4878e8;
 }
 
-.card.pokemon {
+.about,
+.technologies {
   width: 100%;
-  max-width: 300px;
-}
-
-.card.pokemon a {
-  text-decoration: none;
-  color: #466483;
-}
-
-.card.pokemon img {
-  width: 100%;
-  max-width: 200px;
-  margin: 0 auto;
-}
-
-.card.pokemon h2 {
-  margin-bottom: 0.5rem;
-  text-transform: capitalize;
-}
-
-.card.pokemon h2 span {
-  font-size: 1.5rem;
-  font-weight: 400;
+  max-width: 600px;
 }
 </style>
