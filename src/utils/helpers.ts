@@ -2,6 +2,22 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { POKEMON_API_URL, POKEMON_IMAGE_URL } from '../config/constants';
 
+export interface Pokemon {
+  id: string;
+  name: string;
+  url: string;
+  image: string;
+}
+
+export const transformPokemon = (pokemon: any): Pokemon => {
+  const id = pokemon.id ? pokemon.id : pokemon.url.split('/').slice(-2, -1)[0];
+  return {
+    id: id.toString().padStart(3, '0'),
+    ...pokemon,
+    image: `${POKEMON_IMAGE_URL}/${id}.png`, // add image to result because its not part of the API
+  };
+};
+
 const cache = ref<any>({});
 
 export const useFetch = async (url: string, useCache: boolean = true) => {
@@ -17,21 +33,27 @@ export const clearCache = () => {
   cache.value = {};
 };
 
-export const fetchPokemonById = async (id: number) => {
+export const fetchPokemonById = async (id: number): Promise<Pokemon> => {
   const response = await useFetch(`${POKEMON_API_URL}/pokemon/${id}`);
   response.image = `${POKEMON_IMAGE_URL}/${id}.png`; // add image to result
   return response;
 };
 
-export const fetchPokemonByName = async (name: string) => {
+export const fetchPokemonByName = async (name: string): Promise<Pokemon> => {
   const response = await useFetch(`${POKEMON_API_URL}/pokemon/${name}`);
   response.image = `${POKEMON_IMAGE_URL}/${response.id}.png`;
   return response;
 };
 
-export const fetchPokemonList = async (limit: number, offset: number) => {
+export const fetchPokemonList = async (limit: number, offset: number): Promise<any> => {
   const response = await useFetch(`${POKEMON_API_URL}/pokemon/?limit=${limit}&offset=${offset}`);
   return response;
+};
+
+export const fetchRandomPokemons = async (n: number, min: number = 1, max: number = 151): Promise<Pokemon[]> => {
+  const pokemonIds = Array.from({ length: n }, () => Math.floor(Math.random() * (max - min + 1)) + min);
+  const pokemons = await Promise.all(pokemonIds.map(id => fetchPokemonById(id)));
+  return pokemons.map(transformPokemon);
 };
 
 // TODO: implement items page
