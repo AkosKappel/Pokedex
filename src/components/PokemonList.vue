@@ -1,21 +1,25 @@
 <template>
-  <ul class="pokemon-list">
-    <router-link :to="`/pokemon/${pokemon.id}`" v-for="pokemon in pokemons" :key="pokemon.id">
-      <li class="pokemon-list-item">
-        <h3 class="pokemon-list-item-name">
-          {{ pokemon.name }}<span> #{{ pokemon.id.padStart(3, '0') }}</span>
-        </h3>
-        <div class="pokemon-list-item-image">
-          <img :src="pokemon.image" :alt="pokemon.name" loading="lazy" @load="onImageLoad" @error="onImageError" />
-        </div>
-      </li>
-    </router-link>
-  </ul>
+  <div>
+    <ul class="pokemon-list">
+      <router-link :to="`/pokemon/${pokemon.id}`" v-for="pokemon in pokemons" :key="pokemon.id">
+        <li class="pokemon-list-item">
+          <h3 class="pokemon-list-item-name">
+            {{ pokemon.name }}<span> #{{ pokemon.id.padStart(3, '0') }}</span>
+          </h3>
+          <div class="pokemon-list-item-image">
+            <img :src="pokemon.image" :alt="pokemon.name" loading="lazy" @load="onImageLoad" @error="onImageError" />
+          </div>
+        </li>
+      </router-link>
+    </ul>
+    <ToTopButton />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
 import { POKEMON_IMAGE_URL } from '@/config/constants';
+import ToTopButton from './ToTopButton.vue';
 
 interface Pokemon {
   id: string;
@@ -59,10 +63,12 @@ a {
 
 .pokemon-list {
   list-style: none;
-  padding: 0;
+  padding: 1rem 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
   min-height: 100vh;
 }
 
@@ -77,6 +83,7 @@ a {
   background-color: #fff;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease-in-out;
+  flex-basis: calc(33.3333% - 1rem);
 }
 
 .pokemon-list-item:hover {

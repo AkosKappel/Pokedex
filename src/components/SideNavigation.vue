@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps } from 'vue';
+import { defineProps } from 'vue';
 
 const emits = defineEmits(['left', 'right']);
 const props = defineProps({

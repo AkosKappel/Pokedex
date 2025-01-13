@@ -13,7 +13,7 @@
         @left="fetchPokemon(pokemonId - 1)"
         @right="fetchPokemon(pokemonId + 1)"
       />
-      <div class="back-button" @click="router.back()" title="Go back to previous page"></div>
+      <BackButton />
     </div>
   </div>
 </template>
@@ -25,6 +25,8 @@ import LoadingWidget from '@/components/LoadingWidget.vue';
 import PokemonDetails from '@/components/PokemonDetails.vue';
 import SideNavigation from '@/components/SideNavigation.vue';
 import { fetchPokemonById } from '@/utils/helpers';
+import BackButton from '@/components/BackButton.vue';
+import ToTopButton from '@/components/ToTopButton.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -59,23 +61,5 @@ const fetchPokemon = async (pokemonId: number) => {
 
 .not-found strong {
   margin: 0 0.3rem;
-}
-
-.back-button {
-  position: fixed;
-  top: 40px;
-  left: 20px;
-  width: 40px;
-  height: 40px;
-  background-image: url('~@/assets/go-back.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  cursor: pointer;
-  filter: invert(0.6);
-}
-
-.back-button:hover {
-  filter: invert(0.4);
 }
 </style>
