@@ -126,9 +126,12 @@ a {
   opacity: 1;
 }
 
-.pokemon-card.liked .heart,
-.pokemon-card .heart-icon:hover .heart {
+.pokemon-card.liked .heart {
   fill: #ff69b4;
+}
+
+.pokemon-card .heart-icon:hover .heart {
+  fill: #ffafd7;
 }
 
 .pokemon-card:hover {

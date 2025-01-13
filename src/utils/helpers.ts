@@ -12,8 +12,8 @@ export interface Pokemon {
 export const transformPokemon = (pokemon: any): Pokemon => {
   const id = pokemon.id ? pokemon.id : pokemon.url.split('/').slice(-2, -1)[0];
   return {
-    id: id.toString(),
     ...pokemon,
+    id: id.toString(),
     image: `${POKEMON_IMAGE_URL}/${id}.png`, // add image to result because its not part of the API
   };
 };
@@ -35,14 +35,12 @@ export const clearCache = () => {
 
 export const fetchPokemonById = async (id: number): Promise<Pokemon> => {
   const response = await useFetch(`${POKEMON_API_URL}/pokemon/${id}`);
-  response.image = `${POKEMON_IMAGE_URL}/${id}.png`; // add image to result
-  return response;
+  return transformPokemon(response);
 };
 
 export const fetchPokemonByName = async (name: string): Promise<Pokemon> => {
   const response = await useFetch(`${POKEMON_API_URL}/pokemon/${name}`);
-  response.image = `${POKEMON_IMAGE_URL}/${response.id}.png`;
-  return response;
+  return transformPokemon(response);
 };
 
 export const fetchPokemonList = async (limit: number, offset: number): Promise<any> => {

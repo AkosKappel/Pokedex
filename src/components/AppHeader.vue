@@ -10,6 +10,8 @@
         <li><router-link to="/pokemons">Pokémons</router-link></li>
         |
         <li><router-link to="/items">Items</router-link></li>
+        |
+        <li><router-link to="/favorites">Favorites</router-link></li>
       </ul>
     </nav>
   </header>
