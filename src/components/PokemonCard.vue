@@ -1,6 +1,22 @@
 <template>
   <router-link :to="{ name: 'pokemon', params: { id: pokemon.id } }">
-    <li class="pokemon-card">
+    <li :id="pokemon.id" :class="['pokemon-card', { liked: isLiked }]">
+      <div class="heart-icon" @click.prevent="toggleFavorite(pokemon.id)">
+        <svg
+          class="heart"
+          width="24px"
+          height="24px"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4.45067 13.9082L11.4033 20.4395C11.6428 20.6644 11.7625 20.7769 11.9037 20.8046C11.9673 20.8171 12.0327 20.8171 12.0963 20.8046C12.2375 20.7769 12.3572 20.6644 12.5967 20.4395L19.5493 13.9082C21.5055 12.0706 21.743 9.0466 20.0978 6.92607L19.7885 6.52734C17.8203 3.99058 13.8696 4.41601 12.4867 7.31365C12.2913 7.72296 11.7087 7.72296 11.5133 7.31365C10.1304 4.41601 6.17972 3.99058 4.21154 6.52735L3.90219 6.92607C2.25695 9.0466 2.4945 12.0706 4.45067 13.9082Z"
+            stroke="#33363F"
+            stroke-width="2"
+          />
+        </svg>
+      </div>
       <h3 class="pokemon-card-name">
         {{ pokemon.name }}<span> #{{ pokemon.id.toString().padStart(3, '0') }}</span>
       </h3>
@@ -12,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { defineProps, ref, onMounted } from 'vue';
 
 interface Pokemon {
   id: string;
@@ -22,6 +38,27 @@ interface Pokemon {
 }
 
 const props = defineProps<{ pokemon: Pokemon }>();
+const isLiked = ref(false);
+
+const initializeFavorites = () => {
+  const favoritePokemons = JSON.parse(localStorage.getItem('favoritePokemons') || '[]') as string[];
+  isLiked.value = favoritePokemons.includes(props.pokemon.id);
+};
+
+const toggleFavorite = (pokemonId: string) => {
+  const favoritePokemons = JSON.parse(localStorage.getItem('favoritePokemons') || '[]') as string[];
+  const index = favoritePokemons.indexOf(pokemonId);
+  const element = document.getElementById(pokemonId);
+
+  if (index === -1) {
+    favoritePokemons.push(pokemonId);
+    element?.classList.add('liked');
+  } else {
+    favoritePokemons.splice(index, 1);
+    element?.classList.remove('liked');
+  }
+  localStorage.setItem('favoritePokemons', JSON.stringify(favoritePokemons));
+};
 
 const onImageLoad = (event: Event) => {
   (event.target as HTMLImageElement).style.backgroundImage = 'none';
@@ -30,6 +67,10 @@ const onImageLoad = (event: Event) => {
 const onImageError = (event: Event) => {
   (event.target as HTMLImageElement).src = require('@/assets/pokeball.png');
 };
+
+onMounted(() => {
+  initializeFavorites();
+});
 </script>
 
 <style scoped>
@@ -50,6 +91,7 @@ a {
 }
 
 .pokemon-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,6 +103,32 @@ a {
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease-in-out;
   flex-basis: calc(33.3333% - 1rem);
+}
+
+.heart-icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.heart-icon .heart {
+  width: 100%;
+  height: 100%;
+  transition: fill 0.2s ease-in-out;
+}
+
+.pokemon-card.liked .heart-icon,
+.pokemon-card:hover .heart-icon {
+  opacity: 1;
+}
+
+.pokemon-card.liked .heart,
+.pokemon-card .heart-icon:hover .heart {
+  fill: #ff69b4;
 }
 
 .pokemon-card:hover {

@@ -12,7 +12,7 @@ export interface Pokemon {
 export const transformPokemon = (pokemon: any): Pokemon => {
   const id = pokemon.id ? pokemon.id : pokemon.url.split('/').slice(-2, -1)[0];
   return {
-    id: id.toString().padStart(3, '0'),
+    id: id.toString(),
     ...pokemon,
     image: `${POKEMON_IMAGE_URL}/${id}.png`, // add image to result because its not part of the API
   };
