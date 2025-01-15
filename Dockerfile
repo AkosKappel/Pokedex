@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM nginx:1.19.0-alpine AS production-stage
+FROM nginx:1.27.0-alpine AS production-stage
 
 COPY --from=build-stage /app/dist /app/pokevue
 
