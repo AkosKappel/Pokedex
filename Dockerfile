@@ -12,9 +12,11 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM nginx:alpine AS production-stage
+FROM nginx:1.19.0-alpine AS production-stage
 
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage /app/dist /app/pokevue
+
+COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 
