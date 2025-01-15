@@ -5,21 +5,19 @@
     </h1>
     <nav>
       <ul>
-        <li><router-link to="/">Home</router-link></li>
+        <li><router-link :to="{ name: 'home' }">Home</router-link></li>
         |
-        <li><router-link to="/pokemons">Pokémons</router-link></li>
+        <li><router-link :to="{ name: 'pokemons' }">Pokémon</router-link></li>
         |
-        <li><router-link to="/items">Items</router-link></li>
+        <li><router-link :to="{ name: 'items' }">Items</router-link></li>
         |
-        <li><router-link to="/favorites">Favorites</router-link></li>
+        <li><router-link :to="{ name: 'favorites' }">Favorites</router-link></li>
       </ul>
     </nav>
   </header>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
-
 const props = defineProps({
   title: String,
 });

@@ -8,7 +8,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
 import ToTopButton from '@/components/ToTopButton.vue';
 import PokemonCard from '@/components/PokemonCard.vue';
 import { transformPokemon, type Pokemon } from '@/utils/helpers';

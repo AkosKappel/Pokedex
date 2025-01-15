@@ -8,7 +8,7 @@ const routes: Array<RouteRecordRaw> = [
     component: HomeView,
   },
   {
-    path: '/pokemons',
+    path: '/pokemon',
     name: 'pokemons',
     component: () => import('../views/PokemonsView.vue'),
   },

@@ -7,7 +7,7 @@
     <div v-else>
       <p>
         You have no favorite Pokémons yet.<br />
-        Go to the <router-link to="/pokemons">Pokémons</router-link> page to add some.
+        Go to the <router-link :to="{ name: 'pokemons' }">Pokémon</router-link> page to add some.
       </p>
       <img :src="require('@/assets/pokeball.png')" alt="Pokeball" loading="lazy" />
     </div>

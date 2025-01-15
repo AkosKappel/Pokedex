@@ -64,8 +64,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
-
 interface Pokemon {
   id: number;
   name: string;
