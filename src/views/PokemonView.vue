@@ -422,13 +422,23 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
 }
 
 @media (max-width: 800px) {
-  .hero,
   .sections {
     grid-template-columns: 1fr;
   }
 
   .hero {
     gap: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .screen {
+    justify-self: center;
+    width: min(100%, 26rem);
   }
 
   .neighbour .number {
