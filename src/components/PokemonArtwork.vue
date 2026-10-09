@@ -2,6 +2,7 @@
   <div class="artwork" :class="{ loaded, failed }">
     <img
       v-if="!failed"
+      ref="image"
       :src="artworkUrl(id, shiny)"
       :alt="alt"
       :width="size"
@@ -21,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { onMounted, ref, useTemplateRef, watch } from 'vue';
 import { artworkUrl } from '@/lib/pokedex';
 
 const props = withDefaults(
@@ -35,6 +36,12 @@ const props = withDefaults(
 
 const loaded = ref(false);
 const failed = ref(false);
+const image = useTemplateRef('image');
+
+// Artwork already in the browser cache shows at once, without the fade (and in page transitions).
+onMounted(() => {
+  if (image.value?.complete && image.value.naturalWidth) loaded.value = true;
+});
 
 watch(
   () => [props.id, props.shiny],
