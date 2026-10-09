@@ -42,6 +42,7 @@ All data comes from [PokéAPI](https://pokeapi.co/).
 
 - `src/data/` holds snapshots taken from PokéAPI by `scripts/build-data.js` (GraphQL, and REST for the game order): every species (number, name, region, types, base stat total), moves, abilities, items, names in eight more languages, and the release order of the games. Search, filters and sorting need no requests. The Pokédex index is part of the main bundle; the other files load with the pages that need them. Refresh them with `npm run data` when new games are released.
 - Details (stats, abilities, descriptions, evolutions) load from the PokéAPI REST endpoints when a Pokémon is opened. The service worker caches responses and artwork for 30 days.
+- Artwork comes from the [PokéAPI sprites](https://github.com/PokeAPI/sprites) through jsDelivr, resized to WebP by the [wsrv.nl](https://wsrv.nl/) image CDN (about 10 kB per card instead of 115 to 200 kB). The original PNG is the fallback.
 - The type chart in `src/lib/types.ts` is the generation 6+ chart, checked against PokéAPI's damage relations.
 
 ## Getting started
