@@ -6,7 +6,7 @@
       <h3 class="name">{{ species.name }}</h3>
     </RouterLink>
     <div class="types">
-      <TypeBadge v-for="type in species.types" :key="type" :type="type" />
+      <TypeBadge v-for="type in species.types" :key="type" :type="type" compact />
     </div>
     <FavoriteButton :id="species.id" :name="species.name" class="favorite" />
   </li>
@@ -25,6 +25,7 @@ defineProps<{ species: Species }>();
 .card {
   position: relative;
   display: grid;
+  align-content: start;
   gap: 0.6rem;
   padding: 0.75rem 0.75rem 1rem;
   border: 1px solid var(--line);
@@ -79,7 +80,7 @@ defineProps<{ species: Species }>();
 .types {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: 0.3rem;
 }
 
 .favorite {

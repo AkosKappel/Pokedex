@@ -1,5 +1,11 @@
 <template>
-  <component :is="to ? RouterLink : 'span'" :to="to" class="type-badge" :style="{ '--type': `var(--${type})` }">
+  <component
+    :is="to ? RouterLink : 'span'"
+    :to="to"
+    class="type-badge"
+    :class="{ compact }"
+    :style="{ '--type': `var(--${type})` }"
+  >
     {{ titleCase(type) }}
   </component>
 </template>
@@ -9,7 +15,7 @@ import { RouterLink, type RouteLocationRaw } from 'vue-router';
 import type { TypeName } from '@/lib/types';
 import { titleCase } from '@/lib/format';
 
-defineProps<{ type: TypeName; to?: RouteLocationRaw }>();
+defineProps<{ type: TypeName; to?: RouteLocationRaw; compact?: boolean }>();
 </script>
 
 <style scoped>
@@ -35,6 +41,17 @@ defineProps<{ type: TypeName; to?: RouteLocationRaw }>();
   height: 0.65rem;
   border-radius: 50%;
   background: var(--type);
+}
+
+.compact {
+  gap: 0.3rem;
+  padding-inline: 0.35rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.compact::before {
+  width: 0.55rem;
+  height: 0.55rem;
 }
 
 a.type-badge:hover {
