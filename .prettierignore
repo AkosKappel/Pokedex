@@ -1,0 +1,7 @@
+dist
+package-lock.json
+BACKLOG.md
+.worktrees
+lighthouse-report
+test-results
+playwright-report
