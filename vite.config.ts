@@ -27,9 +27,21 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg}'],
         // Prerendered Pokémon pages are only needed when visited.
-        globIgnores: ['pokemon/**'],
+        // Prerendered pages and the large data chunks (moves, items, other languages) are cached when first used.
+        globIgnores: [
+          'pokemon/**',
+          'moves/**',
+          'abilities/**',
+          'assets/{moves,abilities,items,de,fr,es,it,ja,ko,zh-Hans,zh-Hant}-*.js',
+        ],
         navigateFallback: 'index.html',
         runtimeCaching: [
+          {
+            // Hashed build files never change.
+            urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.includes('/assets/'),
+            handler: 'CacheFirst',
+            options: { cacheName: 'assets', expiration: { maxEntries: 60 } },
+          },
           {
             // PokéAPI data changes only with new games.
             urlPattern: ({ url }) => url.origin === 'https://pokeapi.co',

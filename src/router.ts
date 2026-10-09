@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router';
 import HomeView from '@/views/HomeView.vue';
 import { findById, formatNumber } from '@/lib/pokedex';
+import { loadMoves } from '@/lib/moves';
+import { loadAbilities } from '@/lib/abilities';
 
 const SITE = 'Pokédex';
 const DEFAULT_DESCRIPTION =
@@ -14,6 +16,12 @@ declare module 'vue-router' {
 }
 
 const speciesOf = (route: RouteLocationNormalized) => findById(Number(route.params.id));
+
+const notFound = (to: RouteLocationNormalized) => ({
+  name: 'not-found',
+  params: { pathMatch: to.path.slice(1).split('/') },
+  replace: true,
+});
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,14 +39,66 @@ const router = createRouter({
       component: () => import('@/views/PokemonView.vue'),
       props: route => ({ id: Number(route.params.id) }),
       beforeEnter: to => {
-        if (!speciesOf(to)) {
-          return { name: 'not-found', params: { pathMatch: to.path.slice(1).split('/') }, replace: true };
-        }
+        if (!speciesOf(to)) return notFound(to);
       },
       meta: {
         title: route => `${speciesOf(route)?.name} ${formatNumber(Number(route.params.id))}`,
         description: route =>
           `${speciesOf(route)?.name}: stats, abilities, evolutions, weaknesses and artwork in the Pokédex.`,
+      },
+    },
+    {
+      path: '/moves',
+      name: 'moves',
+      component: () => import('@/views/MovesView.vue'),
+      meta: {
+        title: 'Moves',
+        description: 'Every move Pokémon can learn, with type, category, power, accuracy and PP.',
+      },
+    },
+    {
+      path: '/moves/:id(\\d+)',
+      name: 'move',
+      component: () => import('@/views/MoveView.vue'),
+      props: route => ({ id: Number(route.params.id) }),
+      beforeEnter: async to => {
+        const move = (await loadMoves()).find(m => m.id === Number(to.params.id));
+        if (!move) return notFound(to);
+        to.meta.title = move.name;
+        to.meta.description = `${move.name}: ${move.description}`;
+      },
+    },
+    {
+      path: '/abilities',
+      name: 'abilities',
+      component: () => import('@/views/AbilitiesView.vue'),
+      meta: { title: 'Abilities', description: 'Every Pokémon ability, what it does and which Pokémon have it.' },
+    },
+    {
+      path: '/abilities/:id(\\d+)',
+      name: 'ability',
+      component: () => import('@/views/AbilityView.vue'),
+      props: route => ({ id: Number(route.params.id) }),
+      beforeEnter: async to => {
+        const ability = (await loadAbilities()).find(a => a.id === Number(to.params.id));
+        if (!ability) return notFound(to);
+        to.meta.title = ability.name;
+        to.meta.description = `${ability.name}: ${ability.description}`;
+      },
+    },
+    {
+      path: '/items',
+      name: 'items',
+      component: () => import('@/views/ItemsView.vue'),
+      meta: { title: 'Items', description: 'Poké Balls, medicine, berries, held items and key items.' },
+    },
+    {
+      path: '/team',
+      name: 'team',
+      component: () => import('@/views/TeamView.vue'),
+      meta: {
+        title: 'Team builder',
+        description: 'Build a team of six Pokémon and check its shared weaknesses and attack coverage.',
       },
     },
     {
@@ -74,8 +134,8 @@ const router = createRouter({
   ],
   scrollBehavior: (to, from, savedPosition) => {
     if (savedPosition) return savedPosition;
-    // Filter changes on the browse page keep the toolbar in view.
-    if (to.name === 'browse' && from.name === 'browse' && to.query.page === from.query.page) return false;
+    // Filter changes and dialogs (?item=) on the same page keep the scroll position.
+    if (to.path === from.path && to.query.page === from.query.page) return false;
     return { top: 0 };
   },
 });

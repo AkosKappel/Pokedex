@@ -7,6 +7,7 @@
 //   abilities.json      main-series abilities that at least one Pokémon has
 //   items.json          items with an English name, without TMs, data cards and unused items
 //   names/<lang>.json   names of species, moves, abilities and items in other languages
+//   version-groups.json release order of the games (PokéAPI ids are not chronological)
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const ENDPOINT = 'https://beta.pokeapi.co/graphql/v1beta';
@@ -114,6 +115,17 @@ const { items } = await query(`{
   }
 }`);
 
+// The GraphQL endpoint lags behind REST for new games, so the release order comes from REST.
+const groupList = await (await fetch('https://pokeapi.co/api/v2/version-group?limit=200')).json();
+const versionGroups = Object.fromEntries(
+  await Promise.all(
+    groupList.results.map(async ({ url }) => {
+      const group = await (await fetch(url)).json();
+      return [group.name, group.order];
+    }),
+  ),
+);
+
 const pokedex = species.map(entry => {
   const [pokemon] = entry.pokemon;
   if (!english(entry) || !pokemon) throw new Error(`Incomplete data for species ${entry.id}`);
@@ -156,15 +168,29 @@ const abilityIndex = abilities.map(ability => ({
   description: description(ability),
 }));
 
-const itemIndex = items.map(item => ({
-  id: item.id,
-  slug: item.name,
-  name: english(item),
-  pocket: item.category.pocket.name,
-  category: item.category.name,
-  cost: item.cost,
-  description: description(item),
-}));
+// Some items exist again in one game with their own sprite (Legends: Arceus balls "lagreat-ball",
+// Let's Go key items "card-key--letsgo"). They keep the English name, so label the game.
+const EDITIONS = { la: 'Legends: Arceus', letsgo: "Let's Go", galar: 'Galar', pikachu: 'Pikachu', eevee: 'Eevee' };
+const slugs = new Set(items.map(item => item.name));
+const editionOf = slug => {
+  const suffix = slug.split('--')[1];
+  if (suffix) return EDITIONS[suffix] ?? suffix;
+  if (slug.startsWith('la') && slugs.has(slug.slice(2))) return EDITIONS.la;
+};
+
+const seen = new Set();
+const itemIndex = items
+  .filter(item => !seen.has(item.name) && seen.add(item.name))
+  .map(item => ({
+    id: item.id,
+    slug: item.name,
+    name: english(item),
+    ...(editionOf(item.name) && { edition: editionOf(item.name) }),
+    pocket: item.category.pocket.name,
+    category: item.category.name,
+    cost: item.cost,
+    description: description(item),
+  }));
 
 const localized = (entries, ids) => {
   const result = {};
@@ -183,6 +209,7 @@ await writeFile(new URL('pokedex.json', dataDir), lines(pokedex));
 await writeFile(new URL('moves.json', dataDir), lines(moveIndex));
 await writeFile(new URL('abilities.json', dataDir), lines(abilityIndex));
 await writeFile(new URL('items.json', dataDir), lines(itemIndex));
+await writeFile(new URL('version-groups.json', dataDir), JSON.stringify(versionGroups) + '\n');
 for (const [code, ids] of Object.entries(LANGUAGES)) {
   const translations = {
     pokemon: localized(species, ids),

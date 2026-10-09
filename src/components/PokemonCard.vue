@@ -1,22 +1,35 @@
 <template>
   <li class="card" :style="{ '--type': `var(--${species.types[0]})` }">
-    <RouterLink :to="{ name: 'pokemon', params: { id: species.id } }" class="link">
-      <PokemonArtwork :id="species.id" :alt="species.name" :size="200" class="art" />
+    <RouterLink :to="{ name: 'pokemon', params: { id: species.id } }" class="link" @click="morph = true">
+      <PokemonArtwork
+        :id="species.id"
+        :alt="speciesName(species)"
+        :size="200"
+        class="art"
+        :style="{ viewTransitionName: morph ? `pokemon-${species.id}` : undefined }"
+      />
       <span class="number">{{ formatNumber(species.id) }}</span>
-      <h3 class="name">{{ species.name }}</h3>
+      <h3 class="name" :lang="lang">{{ speciesName(species) }}</h3>
     </RouterLink>
     <div class="types">
       <TypeBadge v-for="type in species.types" :key="type" :type="type" compact />
     </div>
-    <FavoriteButton :id="species.id" :name="species.name" class="favorite" />
+    <FavoriteButton :id="species.id" :name="speciesName(species)" class="favorite" />
   </li>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import PokemonArtwork from './PokemonArtwork.vue';
 import TypeBadge from './TypeBadge.vue';
 import FavoriteButton from './FavoriteButton.vue';
 import { formatNumber, type Species } from '@/lib/pokedex';
+import { useLanguage } from '@/lib/language';
+
+const { speciesName, lang } = useLanguage();
+
+// Only the opened card takes part in the page transition, so its artwork moves into the Pokémon page.
+const morph = ref(false);
 
 defineProps<{ species: Species }>();
 </script>

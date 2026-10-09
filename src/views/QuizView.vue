@@ -10,7 +10,7 @@
         <PokemonArtwork
           :id="current.id"
           :key="current.id"
-          :alt="revealed ? current.name : 'Silhouette of a mystery Pokémon'"
+          :alt="revealed ? speciesName(current) : 'Silhouette of a mystery Pokémon'"
           :size="320"
           eager
           class="art"
@@ -52,7 +52,7 @@
               required
             />
             <datalist id="quiz-suggestions">
-              <option v-for="species in suggestions" :key="species.id" :value="species.name" />
+              <option v-for="species in suggestions" :key="species.id" :value="speciesName(species)" />
             </datalist>
             <button type="submit" class="button primary">Guess</button>
           </div>
@@ -61,13 +61,19 @@
 
         <div v-else class="result">
           <p class="verdict">
-            <template v-if="won">Correct, it's {{ current.name }}!</template>
-            <template v-else>It's {{ current.name }}.</template>
+            <template v-if="won"
+              >Correct, it's <span :lang="lang">{{ speciesName(current) }}</span
+              >!</template
+            >
+            <template v-else
+              >It's <span :lang="lang">{{ speciesName(current) }}</span
+              >.</template
+            >
           </p>
           <div class="result-actions">
             <button ref="nextButton" type="button" class="button primary" @click="next(won)">Next Pokémon</button>
             <RouterLink :to="{ name: 'pokemon', params: { id: current.id } }" class="button">
-              See {{ current.name }}
+              See <span :lang="lang">{{ speciesName(current) }}</span>
             </RouterLink>
           </div>
         </div>
@@ -86,6 +92,9 @@ import { computed, nextTick, ref, useTemplateRef } from 'vue';
 import PokemonArtwork from '@/components/PokemonArtwork.vue';
 import { filterPokedex, findExact, POKEDEX, REGIONS, regionOf, type Species } from '@/lib/pokedex';
 import { titleCase } from '@/lib/format';
+import { useLanguage } from '@/lib/language';
+
+const { speciesName, translations, lang } = useLanguage();
 
 const BEST_KEY = 'quizBest';
 
@@ -115,14 +124,16 @@ const input = useTemplateRef('input');
 const nextButton = useTemplateRef('nextButton');
 
 const suggestions = computed(() =>
-  answer.value.trim().length < 2 ? [] : filterPokedex({ query: answer.value }).slice(0, 8),
+  answer.value.trim().length < 2
+    ? []
+    : filterPokedex({ query: answer.value, localNames: translations.value.pokemon }).slice(0, 8),
 );
 
 const hints = computed(() =>
   [
     `Type: ${current.value.types.map(titleCase).join(' and ')}`,
     `Region: ${regionOf(current.value.generation)}`,
-    `Starts with “${current.value.name.charAt(0)}” and has ${current.value.name.length} letters`,
+    `Starts with “${[...speciesName(current.value)][0]}” and has ${[...speciesName(current.value)].length} characters`,
   ].slice(0, wrongGuesses.value),
 );
 
@@ -147,13 +158,15 @@ const reveal = async (correct: boolean) => {
 };
 
 const guess = () => {
-  const species = findExact(answer.value);
+  const species = findExact(answer.value, translations.value.pokemon);
   if (species?.id === current.value.id) {
     feedback.value = '';
     return reveal(true);
   }
   wrongGuesses.value++;
-  feedback.value = species ? `Not ${species.name}. Try again.` : `There is no Pokémon called “${answer.value}”.`;
+  feedback.value = species
+    ? `Not ${speciesName(species)}. Try again.`
+    : `There is no Pokémon called “${answer.value}”.`;
   answer.value = '';
 };
 

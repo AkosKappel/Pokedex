@@ -16,6 +16,11 @@
         <li>Check which attack types are strong or weak against each Pokémon.</li>
         <li>Compare up to three Pokémon, switch to shiny artwork and play their cries.</li>
         <li>Play “Who's that Pokémon?” and guess Pokémon from their silhouettes.</li>
+        <li>Look up moves, abilities and items, and see which Pokémon learn or have them.</li>
+        <li>Build a team of six and check its shared weaknesses and attack coverage.</li>
+        <li>
+          Show Pokémon, move, ability and item names in German, French, Spanish, Italian, Japanese, Korean or Chinese.
+        </li>
         <li>
           Keep a list of favorites. Shortcuts: <kbd>/</kbd> jumps to search, <kbd>←</kbd> and <kbd>→</kbd> step through
           the Pokédex.
@@ -27,12 +32,13 @@
       <h2>Where the data comes from</h2>
       <p>
         Everything comes from <a href="https://pokeapi.co/">PokéAPI</a>, a free and open Pokémon database. The list of
-        names, types and regions ships with the app, so search and filters work instantly and offline. Details load from
-        PokéAPI when you open a Pokémon and are kept in your browser for later visits.
+        names, types and regions (and the lists of moves, abilities, items and translated names) ships with the app, so
+        search and filters work instantly and offline. Details load from PokéAPI when you open a Pokémon and are kept in
+        your browser for later visits.
       </p>
       <p>
-        Favorites, the theme and the cached data stay in your browser. Nothing is sent anywhere, and there are no
-        accounts, cookies or trackers.
+        Favorites, your team, the theme, the language and the cached data stay in your browser. Nothing is sent
+        anywhere, and there are no accounts, cookies or trackers.
       </p>
     </section>
 
@@ -72,7 +78,7 @@
           <dt>2026</dt>
           <dd>
             Rebuilt with Vite and a new design: search, filters, type matchups, evolutions, compare, dark mode and
-            offline support.
+            offline support. Then moves, abilities, items, a team builder and eight more languages.
           </dd>
         </div>
         <div>

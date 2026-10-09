@@ -17,6 +17,14 @@ export interface Pokemon {
   abilities: { is_hidden: boolean; ability: NamedResource }[];
   cries: { latest: string | null; legacy: string | null };
   species: NamedResource;
+  moves: {
+    move: NamedResource;
+    version_group_details: {
+      level_learned_at: number;
+      move_learn_method: NamedResource;
+      version_group: NamedResource;
+    }[];
+  }[];
 }
 
 export interface PokemonSpecies {
@@ -27,6 +35,23 @@ export interface PokemonSpecies {
   flavor_text_entries: { flavor_text: string; language: NamedResource; version: NamedResource }[];
   evolution_chain: { url: string } | null;
   varieties: { is_default: boolean; pokemon: NamedResource }[];
+}
+
+interface LocalizedText {
+  language: NamedResource;
+}
+
+export interface MoveDetails {
+  id: number;
+  learned_by_pokemon: NamedResource[];
+  flavor_text_entries: (LocalizedText & { flavor_text: string })[];
+}
+
+export interface AbilityDetails {
+  id: number;
+  pokemon: { is_hidden: boolean; pokemon: NamedResource }[];
+  flavor_text_entries: (LocalizedText & { flavor_text: string })[];
+  effect_entries: (LocalizedText & { effect: string; short_effect: string })[];
 }
 
 export interface EvolutionDetail {
@@ -82,4 +107,6 @@ const get = <T>(path: string): Promise<T> => {
 
 export const getPokemon = (id: number) => get<Pokemon>(`pokemon/${id}`);
 export const getSpecies = (id: number) => get<PokemonSpecies>(`pokemon-species/${id}`);
+export const getMove = (id: number) => get<MoveDetails>(`move/${id}`);
+export const getAbility = (id: number) => get<AbilityDetails>(`ability/${id}`);
 export const getEvolutionChain = (url: string) => get<EvolutionChain>(url.replace(`${API_URL}/`, ''));

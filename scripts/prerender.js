@@ -9,7 +9,10 @@ const ARTWORK = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprite
 const dist = new URL('../dist/', import.meta.url);
 
 const shell = await readFile(new URL('index.html', dist), 'utf8');
-const pokedex = JSON.parse(await readFile(new URL('../src/data/pokedex.json', import.meta.url), 'utf8'));
+const data = async name => JSON.parse(await readFile(new URL(`../src/data/${name}.json`, import.meta.url), 'utf8'));
+const pokedex = await data('pokedex');
+const moves = await data('moves');
+const abilities = await data('abilities');
 
 const escape = text => text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 const titleCase = slug => slug.charAt(0).toUpperCase() + slug.slice(1);
@@ -59,6 +62,36 @@ const pages = [
     title: 'About · Pokédex',
     description: 'What this Pokédex is, how it is built and where its data comes from.',
   },
+  {
+    path: 'moves/',
+    title: 'Moves · Pokédex',
+    description: `All ${moves.length} moves Pokémon can learn, with type, category, power, accuracy and PP.`,
+  },
+  {
+    path: 'abilities/',
+    title: 'Abilities · Pokédex',
+    description: `All ${abilities.length} Pokémon abilities, what they do and which Pokémon have them.`,
+  },
+  {
+    path: 'items/',
+    title: 'Items · Pokédex',
+    description: 'Poké Balls, medicine, berries, held items and key items.',
+  },
+  {
+    path: 'team/',
+    title: 'Team builder · Pokédex',
+    description: 'Build a team of six Pokémon and check its shared weaknesses and attack coverage.',
+  },
+  ...moves.map(move => ({
+    path: `moves/${move.id}/`,
+    title: `${move.name} · Pokédex`,
+    description: `${move.name}: ${move.description}`,
+  })),
+  ...abilities.map(ability => ({
+    path: `abilities/${ability.id}/`,
+    title: `${ability.name} · Pokédex`,
+    description: `${ability.name}: ${ability.description}`,
+  })),
   ...pokedex.map(species => {
     const number = `#${String(species.id).padStart(4, '0')}`;
     const types = species.types.map(titleCase).join(' and ');
@@ -80,7 +113,7 @@ for (const page of pages) {
 
 await writeFile(new URL('404.html', dist), shell);
 
-const indexed = pages.filter(page => page.path !== 'favorites/');
+const indexed = pages.filter(page => !['favorites/', 'team/'].includes(page.path));
 await writeFile(
   new URL('sitemap.xml', dist),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${indexed

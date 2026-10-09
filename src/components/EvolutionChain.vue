@@ -12,7 +12,9 @@
           >
             <PokemonArtwork :id="evolution.id" :alt="''" :size="120" class="art" />
             <span class="number">{{ formatNumber(evolution.id) }}</span>
-            <span class="member-name">{{ findById(evolution.id)?.name ?? '' }}</span>
+            <span class="member-name" :lang="lang">{{
+              speciesName({ id: evolution.id, name: findById(evolution.id)?.name ?? '' })
+            }}</span>
           </RouterLink>
         </li>
       </ul>
@@ -24,6 +26,9 @@
 import PokemonArtwork from './PokemonArtwork.vue';
 import { findById, formatNumber } from '@/lib/pokedex';
 import type { Evolution } from '@/lib/evolution';
+import { useLanguage } from '@/lib/language';
+
+const { speciesName, lang } = useLanguage();
 
 defineProps<{ stages: Evolution[][]; currentId: number; name: string }>();
 </script>

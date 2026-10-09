@@ -15,6 +15,8 @@ export interface Item {
   id: number;
   slug: string;
   name: string;
+  /** Set for the version of an item that belongs to one game, such as Legends: Arceus. */
+  edition?: string;
   pocket: Pocket;
   category: string;
   cost: number;

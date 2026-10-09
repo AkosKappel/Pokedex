@@ -20,7 +20,7 @@
           aria-describedby="compare-error"
         />
         <datalist id="compare-suggestions">
-          <option v-for="species in suggestions" :key="species.id" :value="species.name" />
+          <option v-for="species in suggestions" :key="species.id" :value="speciesName(species)" />
         </datalist>
         <button type="submit" class="button primary">Add</button>
       </div>
@@ -53,7 +53,7 @@
               <RouterLink :to="{ name: 'pokemon', params: { id: species.id } }" class="head">
                 <PokemonArtwork :id="species.id" :alt="''" :size="160" class="art" />
                 <span class="number">{{ formatNumber(species.id) }}</span>
-                <span class="name">{{ species.name }}</span>
+                <span class="name" :lang="lang">{{ speciesName(species) }}</span>
               </RouterLink>
               <span class="types">
                 <TypeBadge v-for="type in species.types" :key="type" :type="type" />
@@ -95,6 +95,9 @@ import StatusMessage from '@/components/StatusMessage.vue';
 import { getPokemon, type Pokemon } from '@/lib/api';
 import { MAX_STAT, STAT_LABELS } from '@/lib/format';
 import { filterPokedex, findById, findExact, formatNumber, type Species } from '@/lib/pokedex';
+import { useLanguage } from '@/lib/language';
+
+const { speciesName, translations, lang } = useLanguage();
 
 const MAX = 3;
 const route = useRoute();
@@ -119,11 +122,13 @@ const remove = (id: number) => setIds(ids.value.filter(other => other !== id));
 const query = ref('');
 const invalid = ref(false);
 const suggestions = computed(() =>
-  query.value.trim().length < 2 ? [] : filterPokedex({ query: query.value }).slice(0, 8),
+  query.value.trim().length < 2
+    ? []
+    : filterPokedex({ query: query.value, localNames: translations.value.pokemon }).slice(0, 8),
 );
 
 const add = () => {
-  const species = findExact(query.value);
+  const species = findExact(query.value, translations.value.pokemon);
   invalid.value = !species;
   if (!species) return;
   query.value = '';

@@ -8,6 +8,10 @@
         "http://localhost:4175/Pokedex/pokemon/",
         "http://localhost:4175/Pokedex/pokemon/25/",
         "http://localhost:4175/Pokedex/compare/?ids=1,4,7",
+        "http://localhost:4175/Pokedex/moves/",
+        "http://localhost:4175/Pokedex/moves/85/",
+        "http://localhost:4175/Pokedex/items/",
+        "http://localhost:4175/Pokedex/team/?ids=6,9,3",
         "http://localhost:4175/Pokedex/about/"
       ],
       "numberOfRuns": 3,

@@ -3,10 +3,11 @@
     <nav class="neighbours" aria-label="Previous and next Pokémon">
       <RouterLink v-if="previous" :to="{ name: 'pokemon', params: { id: previous.id } }" rel="prev" class="neighbour">
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
-        <span class="number">{{ formatNumber(previous.id) }}</span> {{ previous.name }}
+        <span class="number">{{ formatNumber(previous.id) }}</span>
+        <span :lang="lang">{{ speciesName(previous) }}</span>
       </RouterLink>
       <RouterLink v-if="next" :to="{ name: 'pokemon', params: { id: next.id } }" rel="next" class="neighbour next">
-        <span class="number">{{ formatNumber(next.id) }}</span> {{ next.name }}
+        <span class="number">{{ formatNumber(next.id) }}</span> <span :lang="lang">{{ speciesName(next) }}</span>
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
       </RouterLink>
     </nav>
@@ -16,24 +17,26 @@
         <span class="big-number" :data-number="String(id).padStart(4, '0')"></span>
         <PokemonArtwork
           :id="id"
-          :alt="shiny ? `Shiny ${species.name}` : species.name"
+          :alt="shiny ? `Shiny ${speciesName(species)}` : speciesName(species)"
           :shiny="shiny"
           eager
           class="hero-art"
+          :style="{ viewTransitionName: `pokemon-${id}` }"
         />
       </div>
 
       <div class="summary">
         <p class="number">{{ formatNumber(id) }}</p>
-        <h1>{{ species.name }}</h1>
-        <p v-if="genus" class="genus">{{ genus }}</p>
+        <h1 :lang="lang">{{ speciesName(species) }}</h1>
+        <p v-if="lang" class="english-name">{{ species.name }}</p>
+        <p v-if="genus" class="genus" :lang="lang">{{ genus }}</p>
         <div class="types">
           <TypeBadge v-for="type in species.types" :key="type" :type="type" :to="{ name: 'browse', query: { type } }" />
         </div>
-        <p v-if="flavorText" class="flavor">{{ flavorText }}</p>
+        <p v-if="flavorText" class="flavor" :lang="lang">{{ flavorText }}</p>
 
         <div class="actions">
-          <FavoriteButton :id="id" :name="species.name" label class="button" />
+          <FavoriteButton :id="id" :name="speciesName(species)" label class="button" />
           <button type="button" class="button" :aria-pressed="shiny" @click="shiny = !shiny">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
               <path d="M12 2 14 10l8 2-8 2-2 8-2-8-8-2 8-2Z" fill="currentColor" />
@@ -55,6 +58,7 @@
           </button>
           <button type="button" class="button" @click="share">Share</button>
           <RouterLink :to="{ name: 'compare', query: { ids: String(id) } }" class="button">Compare</RouterLink>
+          <button type="button" class="button" @click="addToTeamAndNotify">Add to team</button>
         </div>
         <p class="notice" role="status">{{ notice }}</p>
 
@@ -79,7 +83,10 @@
             <dt>Abilities</dt>
             <dd>
               <span v-for="(entry, index) in pokemon.abilities" :key="entry.ability.name">
-                {{ titleCase(entry.ability.name) }}<template v-if="entry.is_hidden"> (hidden)</template
+                <RouterLink :to="{ name: 'ability', params: { id: idFromUrl(entry.ability.url) } }" :lang="lang">{{
+                  abilityName({ id: idFromUrl(entry.ability.url), name: titleCase(entry.ability.name) })
+                }}</RouterLink
+                ><template v-if="entry.is_hidden"> (hidden)</template
                 ><template v-if="index < pokemon.abilities.length - 1">, </template>
               </span>
             </dd>
@@ -110,7 +117,12 @@
 
       <section v-if="stages" aria-labelledby="evolution-heading" class="wide">
         <h2 id="evolution-heading">Evolution</h2>
-        <EvolutionChain :stages="stages" :current-id="id" :name="species.name" />
+        <EvolutionChain :stages="stages" :current-id="id" :name="speciesName(species)" />
+      </section>
+
+      <section v-if="pokemon.moves.length" aria-labelledby="moves-heading" class="wide">
+        <h2 id="moves-heading">Moves</h2>
+        <PokemonMoves :moves="pokemon.moves" />
       </section>
 
       <section v-if="forms.length" aria-labelledby="forms-heading" class="wide">
@@ -140,13 +152,18 @@ import StatBars from '@/components/StatBars.vue';
 import TypeMatchups from '@/components/TypeMatchups.vue';
 import EvolutionChain from '@/components/EvolutionChain.vue';
 import StatusMessage from '@/components/StatusMessage.vue';
+import PokemonMoves from '@/components/PokemonMoves.vue';
 import { getEvolutionChain, getPokemon, getSpecies, type Pokemon, type PokemonSpecies } from '@/lib/api';
 import { evolutionStages, type Evolution } from '@/lib/evolution';
 import { cleanFlavorText, formatHeight, formatWeight, idFromUrl, titleCase } from '@/lib/format';
 import { findById, formatNumber, regionOf, type Species } from '@/lib/pokedex';
+import { pickText, useLanguage } from '@/lib/language';
+import { addToTeam } from '@/lib/teamStore';
+import { TEAM_SIZE } from '@/lib/team';
 
 const props = defineProps<{ id: number }>();
 const router = useRouter();
+const { language, lang, speciesName, abilityName } = useLanguage();
 
 // The router only enters this page for numbers in the index.
 const species = computed(() => findById(props.id) as Species);
@@ -186,14 +203,17 @@ watch(
   { immediate: true },
 );
 
-const english = <T extends { language: { name: string } }>(entries: T[]) =>
-  entries.filter(entry => entry.language.name === 'en');
-
-const genus = computed(() => details.value && english(details.value.genera)[0]?.genus);
+const genus = computed(() => details.value && pickText(details.value.genera, language.value)?.genus);
 const flavorText = computed(() => {
-  const entries = details.value && english(details.value.flavor_text_entries);
-  return entries?.length ? cleanFlavorText(entries[entries.length - 1].flavor_text) : '';
+  const entry = details.value && pickText(details.value.flavor_text_entries, language.value);
+  return entry ? cleanFlavorText(entry.flavor_text) : '';
 });
+
+const addToTeamAndNotify = () => {
+  notice.value = addToTeam(props.id, TEAM_SIZE)
+    ? `${speciesName(species.value)} joined your team.`
+    : 'Your team already has six Pokémon. Remove one in the team builder first.';
+};
 
 const forms = computed(() =>
   (details.value?.varieties ?? [])
@@ -212,7 +232,7 @@ const playCry = () => {
 };
 
 const share = async () => {
-  const data = { title: `${species.value.name} · Pokédex`, url: location.href };
+  const data = { title: `${speciesName(species.value)} · Pokédex`, url: location.href };
   try {
     if (navigator.share) return await navigator.share(data);
     await navigator.clipboard.writeText(data.url);
@@ -311,6 +331,11 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
   color: var(--muted);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
+}
+
+.english-name {
+  margin-top: -0.4rem;
+  color: var(--muted);
 }
 
 .genus {

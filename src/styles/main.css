@@ -68,6 +68,8 @@ body {
 
 main {
   flex: 1;
+  /* Keeps the footer below the fold while a page loads its data, so it does not jump. */
+  min-height: 100vh;
   width: var(--page);
   margin: 0 auto;
   padding: 2rem 0 4rem;
@@ -197,4 +199,8 @@ select {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+::view-transition-group(*) {
+  animation-duration: 0.3s;
 }

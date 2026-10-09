@@ -20,9 +20,9 @@
         :style="{ '--type': `var(--${featured.types[0]})` }"
       >
         <span class="featured-label">Pokémon of the day</span>
-        <PokemonArtwork :id="featured.id" :alt="featured.name" :size="320" eager class="featured-art" />
+        <PokemonArtwork :id="featured.id" :alt="speciesName(featured)" :size="320" eager class="featured-art" />
         <span class="featured-number">{{ formatNumber(featured.id) }}</span>
-        <span class="featured-name">{{ featured.name }}</span>
+        <span class="featured-name" :lang="lang">{{ speciesName(featured) }}</span>
       </RouterLink>
     </section>
 
@@ -53,6 +53,18 @@
         </li>
       </ul>
     </section>
+
+    <section aria-labelledby="more-heading" class="block">
+      <h2 id="more-heading">More in the Pokédex</h2>
+      <ul class="tiles more">
+        <li v-for="link in more" :key="link.name">
+          <RouterLink :to="{ name: link.name }" class="tile more-tile">
+            <span class="tile-name">{{ link.title }}</span>
+            <span class="tile-meta">{{ link.text }}</span>
+          </RouterLink>
+        </li>
+      </ul>
+    </section>
   </div>
 </template>
 
@@ -62,6 +74,9 @@ import PokemonArtwork from '@/components/PokemonArtwork.vue';
 import { formatNumber, LAST_ID, POKEDEX, pokemonOfTheDay, REGIONS } from '@/lib/pokedex';
 import { TYPES } from '@/lib/types';
 import { titleCase } from '@/lib/format';
+import { useLanguage } from '@/lib/language';
+
+const { speciesName, lang } = useLanguage();
 
 const router = useRouter();
 const featured = pokemonOfTheDay();
@@ -75,6 +90,13 @@ const regions = REGIONS.map((name, index) => {
   const members = POKEDEX.filter(species => species.generation === index + 1);
   return { name, generation: index + 1, first: members[0].id, last: members[members.length - 1].id };
 });
+
+const more = [
+  { name: 'moves', title: 'Moves', text: 'Power, accuracy and who learns them' },
+  { name: 'abilities', title: 'Abilities', text: 'What they do and which Pokémon have them' },
+  { name: 'items', title: 'Items', text: 'Poké Balls, medicine, berries and more' },
+  { name: 'team', title: 'Team builder', text: 'Check a team of six for shared weaknesses' },
+];
 
 const openRandom = () => router.push({ name: 'pokemon', params: { id: Math.ceil(Math.random() * LAST_ID) } });
 </script>
@@ -191,7 +213,12 @@ h1 {
   background: color-mix(in oklab, var(--type) 14%, var(--panel));
 }
 
-.region-tile {
+.more {
+  grid-template-columns: repeat(auto-fill, minmax(max(14rem, (100% - 1.8rem) / 4), 1fr));
+}
+
+.region-tile,
+.more-tile {
   flex-direction: column;
   gap: 0.1rem;
 }

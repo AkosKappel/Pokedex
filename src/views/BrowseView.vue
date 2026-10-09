@@ -67,6 +67,9 @@ import StatusMessage from '@/components/StatusMessage.vue';
 import { filterPokedex, pageCount, paginate, REGIONS, SORTS, type Sort } from '@/lib/pokedex';
 import { isTypeName, TYPES, type TypeName } from '@/lib/types';
 import { titleCase } from '@/lib/format';
+import { useLanguage } from '@/lib/language';
+
+const { translations } = useLanguage();
 
 const route = useRoute();
 const router = useRouter();
@@ -82,7 +85,13 @@ const generation = computed(() => {
 const sort = computed<Sort>(() => (text(route.query.sort) in SORTS ? (text(route.query.sort) as Sort) : 'number'));
 
 const results = computed(() =>
-  filterPokedex({ query: query.value, types: types.value, generation: generation.value, sort: sort.value }),
+  filterPokedex({
+    query: query.value,
+    types: types.value,
+    generation: generation.value,
+    sort: sort.value,
+    localNames: translations.value.pokemon,
+  }),
 );
 const totalPages = computed(() => pageCount(results.value.length));
 const requestedPage = computed(() => Math.max(1, Math.floor(Number(route.query.page)) || 1));

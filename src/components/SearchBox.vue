@@ -14,7 +14,7 @@
       @input="onInput"
     />
     <datalist id="search-suggestions">
-      <option v-for="species in suggestions" :key="species.id" :value="species.name">
+      <option v-for="species in suggestions" :key="species.id" :value="speciesName(species)">
         {{ formatNumber(species.id) }}
       </option>
     </datalist>
@@ -31,6 +31,9 @@
 import { computed, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { filterPokedex, findExact, formatNumber } from '@/lib/pokedex';
+import { useLanguage } from '@/lib/language';
+
+const { speciesName, translations } = useLanguage();
 
 const route = useRoute();
 const router = useRouter();
@@ -45,7 +48,9 @@ watch(
 );
 
 const suggestions = computed(() =>
-  query.value.trim().length < 2 ? [] : filterPokedex({ query: query.value }).slice(0, 8),
+  query.value.trim().length < 2
+    ? []
+    : filterPokedex({ query: query.value, localNames: translations.value.pokemon }).slice(0, 8),
 );
 
 const openSpecies = (id: number) => {
@@ -56,7 +61,7 @@ const openSpecies = (id: number) => {
 
 const submit = () => {
   const text = query.value.trim();
-  const exact = findExact(text);
+  const exact = findExact(text, translations.value.pokemon);
   if (exact) return openSpecies(exact.id);
   router.push({ name: 'browse', query: text ? { q: text } : {} });
 };
@@ -65,8 +70,8 @@ const submit = () => {
 const onInput = (event: Event) => {
   const type = (event as InputEvent).inputType;
   if (type && type !== 'insertReplacementText') return;
-  const exact = findExact(query.value);
-  if (exact && exact.name === query.value) openSpecies(exact.id);
+  const exact = findExact(query.value, translations.value.pokemon);
+  if (exact && speciesName(exact) === query.value) openSpecies(exact.id);
 };
 
 defineExpose({ focus: () => input.value?.focus() });
