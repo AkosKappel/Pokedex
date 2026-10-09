@@ -2,8 +2,7 @@
   <header class="header">
     <div class="bar">
       <RouterLink to="/" class="brand">
-        <span class="lens" aria-hidden="true"></span>
-        <span class="leds" aria-hidden="true"><i></i><i></i><i></i></span>
+        <AppLogo class="mark" />
         <span class="name">Pokédex</span>
       </RouterLink>
 
@@ -55,6 +54,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, useTemplateRef } from 'vue';
 import SearchBox from './SearchBox.vue';
+import AppLogo from './AppLogo.vue';
 import ThemeToggle from './ThemeToggle.vue';
 import HeaderPopover from './HeaderPopover.vue';
 import LanguagePicker from './LanguagePicker.vue';
@@ -99,44 +99,18 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
 .brand {
   grid-area: brand;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.6rem;
   text-decoration: none;
 }
 
-.lens {
-  width: 2.6rem;
-  height: 2.6rem;
-  border-radius: 50%;
-  border: 3px solid #fff;
-  background: radial-gradient(circle at 32% 30%, #bfe6ff 0 12%, var(--lens) 30%, #12558f 100%);
-  box-shadow: 0 0 0 2px var(--red-deep);
-}
-
-.leds {
-  display: flex;
-  gap: 0.25rem;
-  padding-top: 0.15rem;
-}
-
-.leds i {
-  width: 0.6rem;
-  height: 0.6rem;
-  border-radius: 50%;
-  border: 1px solid rgb(0 0 0 / 0.35);
-  background: #ff5a5f;
-}
-
-.leds i:nth-child(2) {
-  background: #ffd23f;
-}
-
-.leds i:nth-child(3) {
-  background: #5bd16d;
+.mark {
+  width: auto;
+  height: 2.9rem;
+  filter: drop-shadow(0 2px 0 var(--red-deep));
 }
 
 .name {
-  align-self: center;
   font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -264,10 +238,6 @@ nav :deep(.popover-button):focus-visible {
 }
 
 @media (max-width: 480px) {
-  .leds {
-    display: none;
-  }
-
   .tools {
     gap: 0.3rem;
   }
