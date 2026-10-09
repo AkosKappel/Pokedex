@@ -1,5 +1,6 @@
 import entries from '@/data/pokedex.json';
 import type { TypeName } from './types';
+import { isExactMatch, matchesQuery } from './search';
 
 export interface Species {
   id: number;
@@ -29,19 +30,14 @@ export const formatNumber = (id: number) => `#${String(id).padStart(4, '0')}`;
 
 export const findById = (id: number): Species | undefined => POKEDEX[id - 1];
 
-const normalize = (text: string) =>
-  text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9♀♂]/g, '');
+/** Names in the chosen language, by national number; only names that differ from English. */
+export type LocalNames = Record<number, string>;
 
-/** Exact match by number ("25", "#025") or by name, ignoring case, accents and punctuation ("mr mime"). */
-export const findExact = (query: string): Species | undefined => {
+/** Exact match by number ("25", "#025") or by English or local name, ignoring case, accents and punctuation ("mr mime"). */
+export const findExact = (query: string, localNames: LocalNames = {}): Species | undefined => {
   const number = query.trim().replace(/^#/, '');
   if (/^\d+$/.test(number)) return findById(Number(number));
-  const wanted = normalize(query);
-  return wanted ? POKEDEX.find(species => normalize(species.name) === wanted) : undefined;
+  return POKEDEX.find(species => isExactMatch(query, species.name, localNames[species.id]));
 };
 
 export interface Filters {
@@ -49,24 +45,30 @@ export interface Filters {
   types?: TypeName[];
   generation?: number;
   sort?: Sort;
+  localNames?: LocalNames;
 }
 
-export const filterPokedex = ({ query = '', types = [], generation, sort = 'number' }: Filters): Species[] => {
-  const wanted = normalize(query);
+export const filterPokedex = ({
+  query = '',
+  types = [],
+  generation,
+  sort = 'number',
+  localNames = {},
+}: Filters): Species[] => {
   const number = query.trim().replace(/^#/, '');
   const byNumber = /^\d+$/.test(number);
 
   const results = POKEDEX.filter(
     species =>
-      (!wanted ||
-        (byNumber
-          ? String(species.id).startsWith(String(Number(number)))
-          : normalize(species.name).includes(wanted))) &&
+      (byNumber
+        ? String(species.id).startsWith(String(Number(number)))
+        : matchesQuery(query, species.name, localNames[species.id])) &&
       types.every(type => species.types.includes(type)) &&
       (!generation || species.generation === generation),
   );
 
-  if (sort === 'name') return results.sort((a, b) => a.name.localeCompare(b.name));
+  const nameOf = (species: Species) => localNames[species.id] ?? species.name;
+  if (sort === 'name') return results.sort((a, b) => nameOf(a).localeCompare(nameOf(b)));
   if (sort === 'total') return results.sort((a, b) => b.total - a.total || a.id - b.id);
   return results;
 };
