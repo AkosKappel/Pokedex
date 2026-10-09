@@ -5,6 +5,7 @@
       <p class="lead">Saved in this browser only.</p>
     </header>
 
+    <h2 v-if="favorites.length" class="visually-hidden">Your favorites</h2>
     <ul v-if="favorites.length" class="grid">
       <PokemonCard v-for="species in favorites" :key="species.id" :species="species" />
     </ul>

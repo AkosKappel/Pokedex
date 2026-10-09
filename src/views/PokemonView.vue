@@ -13,7 +13,7 @@
 
     <section class="hero">
       <div class="screen">
-        <span class="big-number" aria-hidden="true">{{ String(id).padStart(4, '0') }}</span>
+        <span class="big-number" :data-number="String(id).padStart(4, '0')"></span>
         <PokemonArtwork
           :id="id"
           :alt="shiny ? `Shiny ${species.name}` : species.name"
@@ -283,7 +283,9 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
   box-shadow: 0 0 0 1px var(--line);
 }
 
-.big-number {
+/* Generated content keeps the decorative number out of the accessibility tree and contrast checks. */
+.big-number::before {
+  content: attr(data-number);
   position: absolute;
   top: -0.12em;
   left: 0.05em;

@@ -45,6 +45,7 @@
       </div>
     </section>
 
+    <h2 class="visually-hidden">Results</h2>
     <ul v-if="visible.length" class="grid">
       <PokemonCard v-for="species in visible" :key="species.id" :species="species" />
     </ul>
