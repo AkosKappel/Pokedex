@@ -22,7 +22,7 @@ A fast Pokédex for all 1025 Pokémon. Search by name or number, filter by type 
 - **Team builder** for six Pokémon: shared weaknesses, attack coverage and a table per attack type. Shareable by URL.
 - **Languages**: Pokémon, move, ability and item names (and Pokémon descriptions) in English, German, French, Spanish, Italian, Japanese, Korean and Chinese. Search accepts names in the chosen language.
 - **Compare** up to three Pokémon side by side.
-- **Favorites** saved in the browser.
+- **Favorites** saved in the browser: filter, sort (number, name, recently added), share as a link, export and import as JSON.
 - **Dark mode**, page transitions where the artwork moves into the Pokémon page, keyboard shortcuts (<kbd>/</kbd> for search, <kbd>←</kbd> <kbd>→</kbd> on a Pokémon page), installable and usable offline after the first visit.
 
 ## Stack

@@ -22,8 +22,8 @@
           Show Pokémon, move, ability and item names in German, French, Spanish, Italian, Japanese, Korean or Chinese.
         </li>
         <li>
-          Keep a list of favorites. Shortcuts: <kbd>/</kbd> jumps to search, <kbd>←</kbd> and <kbd>→</kbd> step through
-          the Pokédex.
+          Keep a list of favorites, sort and filter it, share it as a link or export it as a file. Shortcuts:
+          <kbd>/</kbd> jumps to search, <kbd>←</kbd> and <kbd>→</kbd> step through the Pokédex.
         </li>
       </ul>
     </section>

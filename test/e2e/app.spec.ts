@@ -174,3 +174,51 @@ test('search fields have their own clear button', async ({ page }) => {
   await page.getByRole('search').getByRole('button', { name: 'Clear search' }).click();
   await expect(search).toHaveValue('');
 });
+
+test('favorites can be filtered, sorted, shared, exported and imported', async ({ page, context, checkA11y }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('favorites');
+  await page.evaluate(() => localStorage.setItem('favoritePokemons', '[25, 1, 6]'));
+  await page.reload();
+
+  const names = page.getByRole('heading', { level: 3 });
+  await expect(names).toHaveText(['Bulbasaur', 'Charizard', 'Pikachu']);
+  await page.getByLabel('Sort by').selectOption('added');
+  await expect(names).toHaveText(['Charizard', 'Bulbasaur', 'Pikachu']);
+  await page.getByLabel('Type').selectOption('fire');
+  await expect(names).toHaveText(['Charizard']);
+  await checkA11y();
+
+  await page.getByRole('button', { name: 'Share list' }).click();
+  await expect(page.getByText('Link copied.')).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toMatch(/\/Pokedex\/favorites\?ids=25,1,6$/);
+
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    page.getByRole('button', { name: 'Export' }).click(),
+  ]);
+  expect(download.suggestedFilename()).toBe('pokedex-favorites.json');
+  const exported = await (await download.createReadStream()).toArray();
+  const file = Buffer.concat(exported);
+  expect(JSON.parse(file.toString()).favorites).toEqual([25, 1, 6]);
+
+  page.once('dialog', dialog => dialog.accept());
+  await page.getByRole('button', { name: 'Remove all' }).click();
+  await expect(page.getByRole('heading', { name: 'No favorites yet' })).toBeVisible();
+
+  await page
+    .locator('input[type="file"]')
+    .setInputFiles({ name: 'backup.json', mimeType: 'application/json', buffer: file });
+  await expect(page.getByText('Imported 3 Pokémon: 3 new, 0 already in your favorites.')).toBeVisible();
+  await page
+    .locator('input[type="file"]')
+    .setInputFiles({ name: 'broken.json', mimeType: 'application/json', buffer: Buffer.from('{nope') });
+  await expect(page.getByText('Could not import broken.json. The file is not valid JSON.')).toBeVisible();
+
+  await page.goto('favorites?ids=4,7,25');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Shared favorites');
+  await page.getByRole('button', { name: 'Add all to my favorites' }).click();
+  await expect(page.getByText('Added 2 Pokémon to your favorites.')).toBeVisible();
+  await page.getByRole('link', { name: 'Show my favorites' }).click();
+  await expect(page.getByRole('heading', { level: 3 })).toHaveCount(5);
+});
