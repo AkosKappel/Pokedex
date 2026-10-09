@@ -158,3 +158,19 @@ test('quiz gives hints after a wrong guess and counts the streak', async ({ page
   await expect(page.getByRole('definition').first()).toHaveText('1');
   await expect(page.getByRole('button', { name: 'Next Pokémon' })).toBeFocused();
 });
+
+test('search fields have their own clear button', async ({ page }) => {
+  await page.goto('moves');
+  const name = page.getByLabel('Name', { exact: true });
+  await name.fill('thunder');
+  await expect(page).toHaveURL(/q=thunder/);
+  await page.getByRole('button', { name: 'Clear search' }).click();
+  await expect(name).toHaveValue('');
+  await expect(name).toBeFocused();
+  await expect(page).not.toHaveURL(/q=/);
+
+  const search = page.getByRole('combobox', { name: 'Search by name or number' });
+  await search.fill('pika');
+  await page.getByRole('search').getByRole('button', { name: 'Clear search' }).click();
+  await expect(search).toHaveValue('');
+});

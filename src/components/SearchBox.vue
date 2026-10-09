@@ -18,6 +18,7 @@
         {{ formatNumber(species.id) }}
       </option>
     </datalist>
+    <ClearButton v-if="query" class="clear" @click="clear" />
     <button type="submit" aria-label="Search">
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
         <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2.4" />
@@ -32,6 +33,7 @@ import { computed, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { filterPokedex, findExact, formatNumber } from '@/lib/pokedex';
 import { useLanguage } from '@/lib/language';
+import ClearButton from './ClearButton.vue';
 
 const { speciesName, translations } = useLanguage();
 
@@ -74,12 +76,18 @@ const onInput = (event: Event) => {
   if (exact && speciesName(exact) === query.value) openSpecies(exact.id);
 };
 
+const clear = () => {
+  query.value = '';
+  input.value?.focus();
+};
+
 defineExpose({ focus: () => input.value?.focus() });
 </script>
 
 <style scoped>
 .search-box {
   display: flex;
+  align-items: center;
   border-radius: 999px;
   background: #fff;
   color: #1b2a3a;
@@ -110,8 +118,9 @@ input:focus-visible {
   outline-offset: 2px;
 }
 
-button {
+button[type='submit'] {
   display: grid;
+  align-self: stretch;
   place-items: center;
   width: 2.9rem;
   border: 0;
