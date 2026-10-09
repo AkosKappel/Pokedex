@@ -25,7 +25,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       manifest: false,
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,woff2}'],
+        globPatterns: ['**/*.{js,css,html,svg}'],
         // Prerendered Pokémon pages are only needed when visited.
         globIgnores: ['pokemon/**'],
         navigateFallback: 'index.html',
