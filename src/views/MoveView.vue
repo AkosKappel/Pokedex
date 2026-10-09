@@ -37,7 +37,10 @@
       <StatusMessage v-if="error" title="The Pokémon list did not load" :retry="load">
         PokéAPI did not answer. Check your connection and try again.
       </StatusMessage>
-      <p v-else-if="!learners" class="loading">Loading…</p>
+      <div v-else-if="!learners" aria-busy="true">
+        <p class="visually-hidden">Loading…</p>
+        <SkeletonCards :count="12" />
+      </div>
       <template v-else>
         <ul class="grid">
           <PokemonCard v-for="species in visible" :key="species.id" :species="species" />
@@ -58,6 +61,7 @@ import CategoryBadge from '@/components/CategoryBadge.vue';
 import PokemonCard from '@/components/PokemonCard.vue';
 import PaginationNav from '@/components/PaginationNav.vue';
 import StatusMessage from '@/components/StatusMessage.vue';
+import SkeletonCards from '@/components/SkeletonCards.vue';
 import { getMove, type MoveDetails } from '@/lib/api';
 import { loadMoves, type Move } from '@/lib/moves';
 import { findById, pageCount, paginate, regionOf, type Species } from '@/lib/pokedex';

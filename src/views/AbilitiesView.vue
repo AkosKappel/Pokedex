@@ -37,6 +37,9 @@
       <StatusMessage v-else title="No abilities match">Try another word or region.</StatusMessage>
       <PaginationNav :page="page" :total="totalPages" />
     </template>
+    <div v-else class="skeleton-list abilities-skeleton" aria-busy="true">
+      <SkeletonBlock v-for="n in 10" :key="n" height="4.6rem" radius="var(--radius-m)" />
+    </div>
   </div>
 </template>
 
@@ -45,6 +48,7 @@ import { computed, onMounted, shallowRef } from 'vue';
 import FilterSearch from '@/components/FilterSearch.vue';
 import PaginationNav from '@/components/PaginationNav.vue';
 import StatusMessage from '@/components/StatusMessage.vue';
+import SkeletonBlock from '@/components/SkeletonBlock.vue';
 import { filterAbilities, loadAbilities, type Ability } from '@/lib/abilities';
 import { pageCount, paginate, REGIONS } from '@/lib/pokedex';
 import { useLanguage } from '@/lib/language';
@@ -78,6 +82,19 @@ const visible = computed(() => paginate(results.value ?? [], page.value, PAGE_SI
 </script>
 
 <style scoped>
+.skeleton-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.abilities-skeleton {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+}
+
+.items-skeleton {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+}
+
 .filters {
   display: flex;
   flex-wrap: wrap;

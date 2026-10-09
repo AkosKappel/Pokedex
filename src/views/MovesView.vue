@@ -47,6 +47,9 @@
       <StatusMessage v-else title="No moves match">Try another name or fewer filters.</StatusMessage>
       <PaginationNav :page="page" :total="totalPages" />
     </template>
+    <div v-else class="skeleton-list" aria-busy="true">
+      <SkeletonBlock v-for="n in 12" :key="n" height="2.6rem" radius="var(--radius-m)" />
+    </div>
   </div>
 </template>
 
@@ -56,6 +59,7 @@ import FilterSearch from '@/components/FilterSearch.vue';
 import MoveTable from '@/components/MoveTable.vue';
 import PaginationNav from '@/components/PaginationNav.vue';
 import StatusMessage from '@/components/StatusMessage.vue';
+import SkeletonBlock from '@/components/SkeletonBlock.vue';
 import { CATEGORIES, filterMoves, loadMoves, MOVE_SORTS, type Category, type Move, type MoveSort } from '@/lib/moves';
 import { pageCount, paginate } from '@/lib/pokedex';
 import { isTypeName, TYPES } from '@/lib/types';
@@ -91,6 +95,11 @@ const visible = computed(() => paginate(results.value ?? [], page.value, PAGE_SI
 </script>
 
 <style scoped>
+.skeleton-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
 .filters {
   display: flex;
   flex-wrap: wrap;

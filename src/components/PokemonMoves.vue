@@ -10,7 +10,10 @@
       </fieldset>
       <p class="game">In Pokémon {{ gameName }}</p>
     </div>
-    <p v-if="!index" class="muted">Loading moves…</p>
+    <div v-if="!index" class="skeleton-table" aria-busy="true">
+      <p class="visually-hidden">Loading moves…</p>
+      <SkeletonBlock v-for="n in 8" :key="n" height="2.1rem" />
+    </div>
     <MoveTable
       v-else-if="rows.length"
       :moves="rows.map(row => row.move)"
@@ -23,6 +26,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, shallowRef, watch } from 'vue';
 import MoveTable from './MoveTable.vue';
+import SkeletonBlock from './SkeletonBlock.vue';
 import type { Pokemon } from '@/lib/api';
 import { loadMoves, type Move } from '@/lib/moves';
 import { idFromUrl, titleCase } from '@/lib/format';
@@ -174,6 +178,11 @@ const rows = computed(() => {
 .count {
   font-size: 0.8rem;
   opacity: 0.75;
+}
+
+.skeleton-table {
+  display: grid;
+  gap: 0.4rem;
 }
 
 .game,

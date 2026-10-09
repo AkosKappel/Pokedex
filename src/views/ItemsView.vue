@@ -43,6 +43,9 @@
       <StatusMessage v-else title="No items match">Try another name or pocket.</StatusMessage>
       <PaginationNav :page="page" :total="totalPages" />
     </template>
+    <div v-else class="skeleton-list items-skeleton" aria-busy="true">
+      <SkeletonBlock v-for="n in 24" :key="n" height="3rem" radius="var(--radius-m)" />
+    </div>
 
     <dialog ref="dialog" class="dialog" aria-labelledby="item-heading" @close="closeDialog" @click="onBackdropClick">
       <template v-if="selected">
@@ -89,6 +92,7 @@ import FilterSearch from '@/components/FilterSearch.vue';
 import ItemSprite from '@/components/ItemSprite.vue';
 import PaginationNav from '@/components/PaginationNav.vue';
 import StatusMessage from '@/components/StatusMessage.vue';
+import SkeletonBlock from '@/components/SkeletonBlock.vue';
 import { filterItems, loadItems, POCKETS, type Item, type Pocket } from '@/lib/items';
 import { pageCount, paginate } from '@/lib/pokedex';
 import { titleCase } from '@/lib/format';
@@ -136,6 +140,19 @@ const onBackdropClick = (event: MouseEvent) => {
 </script>
 
 <style scoped>
+.skeleton-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.abilities-skeleton {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+}
+
+.items-skeleton {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+}
+
 .filters {
   display: grid;
   gap: 1.25rem;

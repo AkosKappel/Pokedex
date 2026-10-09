@@ -16,7 +16,10 @@
     <StatusMessage v-if="error" title="The Pokémon list did not load" :retry="load">
       PokéAPI did not answer. Check your connection and try again.
     </StatusMessage>
-    <p v-else-if="!details" class="loading">Loading…</p>
+    <div v-else-if="!details" class="block" aria-busy="true">
+      <p class="visually-hidden">Loading…</p>
+      <SkeletonCards :count="6" />
+    </div>
     <template v-else>
       <section v-for="group in groups" :key="group.title" :aria-labelledby="group.id" class="block">
         <h2 :id="group.id">
@@ -35,6 +38,7 @@
 import { computed, ref, shallowRef, watch } from 'vue';
 import PokemonCard from '@/components/PokemonCard.vue';
 import StatusMessage from '@/components/StatusMessage.vue';
+import SkeletonCards from '@/components/SkeletonCards.vue';
 import { getAbility, type AbilityDetails } from '@/lib/api';
 import { loadAbilities, type Ability } from '@/lib/abilities';
 import { findById, regionOf, type Species } from '@/lib/pokedex';

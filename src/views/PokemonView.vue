@@ -34,6 +34,10 @@
           <TypeBadge v-for="type in species.types" :key="type" :type="type" :to="{ name: 'browse', query: { type } }" />
         </div>
         <p v-if="flavorText" class="flavor" :lang="lang">{{ flavorText }}</p>
+        <div v-else-if="!details && !error" class="flavor-skeleton" aria-hidden="true">
+          <SkeletonBlock height="1.1rem" />
+          <SkeletonBlock width="70%" height="1.1rem" />
+        </div>
 
         <div class="actions">
           <FavoriteButton :id="id" :name="speciesName(species)" label class="button" />
@@ -43,8 +47,11 @@
             </svg>
             Shiny
           </button>
-          <button v-if="pokemon?.cries.latest" type="button" class="button" @click="playCry">
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <button v-if="pokemon?.cries.latest" type="button" class="button" @click="toggleCry">
+            <svg v-if="playing" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" />
+            </svg>
+            <svg v-else viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
               <path d="M4 9v6h4l5 4V5L8 9Z" fill="currentColor" />
               <path
                 d="M16 8.5a5 5 0 0 1 0 7"
@@ -54,14 +61,39 @@
                 stroke-linecap="round"
               />
             </svg>
-            Play cry
+            {{ playing ? 'Stop cry' : 'Play cry' }}
           </button>
-          <button type="button" class="button" @click="share">Share</button>
-          <RouterLink :to="{ name: 'compare', query: { ids: String(id) } }" class="button">Compare</RouterLink>
-          <button type="button" class="button" @click="addToTeamAndNotify">Add to team</button>
+          <button type="button" class="button" @click="share">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class="icon">
+              <circle cx="17.5" cy="5.5" r="2.5" />
+              <circle cx="6.5" cy="12" r="2.5" />
+              <circle cx="17.5" cy="18.5" r="2.5" />
+              <path d="m8.7 10.7 6.6-3.9M8.7 13.3l6.6 3.9" />
+            </svg>
+            Share
+          </button>
+          <RouterLink :to="{ name: 'compare', query: { ids: String(id) } }" class="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class="icon">
+              <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+            </svg>
+            Compare
+          </RouterLink>
+          <button type="button" class="button" @click="addToTeamAndNotify">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class="icon">
+              <circle cx="9" cy="8" r="3.5" />
+              <path d="M3 20a6 6 0 0 1 12 0M19 8v6M16 11h6" />
+            </svg>
+            Add to team
+          </button>
         </div>
         <p class="notice" role="status">{{ notice }}</p>
 
+        <div v-if="!pokemon && !error" class="facts" aria-hidden="true">
+          <div v-for="n in 4" :key="n" class="fact-skeleton">
+            <SkeletonBlock width="35%" height="0.8rem" />
+            <SkeletonBlock width="60%" height="1.1rem" />
+          </div>
+        </div>
         <dl v-if="pokemon" class="facts">
           <div>
             <dt>Height</dt>
@@ -137,7 +169,17 @@
     </div>
 
     <div v-else class="sections" aria-busy="true">
-      <p class="loading">Loading details…</p>
+      <p class="visually-hidden">Loading details…</p>
+      <section v-for="rows in [7, 5]" :key="rows" aria-hidden="true">
+        <SkeletonBlock width="40%" height="1.6rem" />
+        <SkeletonBlock v-for="n in rows" :key="n" height="0.9rem" :width="`${95 - n * 6}%`" />
+      </section>
+      <section class="wide" aria-hidden="true">
+        <SkeletonBlock width="25%" height="1.6rem" />
+        <div class="skeleton-row">
+          <SkeletonBlock v-for="n in 3" :key="n" width="8.5rem" height="9.5rem" radius="var(--radius-m)" />
+        </div>
+      </section>
     </div>
   </article>
 </template>
@@ -153,6 +195,7 @@ import TypeMatchups from '@/components/TypeMatchups.vue';
 import EvolutionChain from '@/components/EvolutionChain.vue';
 import StatusMessage from '@/components/StatusMessage.vue';
 import PokemonMoves from '@/components/PokemonMoves.vue';
+import SkeletonBlock from '@/components/SkeletonBlock.vue';
 import { getEvolutionChain, getPokemon, getSpecies, type Pokemon, type PokemonSpecies } from '@/lib/api';
 import { evolutionStages, type Evolution } from '@/lib/evolution';
 import { cleanFlavorText, formatHeight, formatWeight, idFromUrl, titleCase } from '@/lib/format';
@@ -177,6 +220,30 @@ const error = ref(false);
 const shiny = ref(false);
 const notice = ref('');
 
+// Cries are mastered loud; play them at a third of full volume, and let a second press stop them.
+const CRY_VOLUME = 0.35;
+let cry: HTMLAudioElement | undefined;
+const playing = ref(false);
+
+const stopCry = () => {
+  cry?.pause();
+  cry = undefined;
+  playing.value = false;
+};
+
+const toggleCry = () => {
+  const url = pokemon.value?.cries.latest;
+  if (playing.value || !url) return stopCry();
+  cry = new Audio(url);
+  cry.volume = CRY_VOLUME;
+  cry.addEventListener('ended', stopCry);
+  playing.value = true;
+  cry.play().catch(() => {
+    stopCry();
+    notice.value = 'This browser cannot play the cry (OGG audio).';
+  });
+};
+
 const load = async () => {
   const id = props.id;
   error.value = false;
@@ -195,6 +262,7 @@ const load = async () => {
 watch(
   () => props.id,
   () => {
+    stopCry();
     pokemon.value = details.value = stages.value = undefined;
     shiny.value = false;
     notice.value = '';
@@ -225,12 +293,6 @@ const forms = computed(() =>
     })),
 );
 
-const playCry = () => {
-  const url = pokemon.value?.cries.latest;
-  if (!url) return;
-  new Audio(url).play().catch(() => (notice.value = 'This browser cannot play the cry (OGG audio).'));
-};
-
 const share = async () => {
   const data = { title: `${speciesName(species.value)} · Pokédex`, url: location.href };
   try {
@@ -250,7 +312,10 @@ const onKeydown = (event: KeyboardEvent) => {
 };
 
 onMounted(() => window.addEventListener('keydown', onKeydown));
-onUnmounted(() => window.removeEventListener('keydown', onKeydown));
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeydown);
+  stopCry();
+});
 </script>
 
 <style scoped>
@@ -360,6 +425,14 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
   margin-top: 0.5rem;
 }
 
+.actions .icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .actions .button {
   padding: 0 0.9rem;
 }
@@ -423,6 +496,22 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
 
 .hint {
   margin-top: -0.6rem;
+}
+
+.flavor-skeleton {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.skeleton-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.fact-skeleton {
+  display: grid;
+  gap: 0.4rem;
 }
 
 .forms {

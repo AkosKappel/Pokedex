@@ -81,7 +81,10 @@
           </tr>
         </tbody>
       </table>
-      <p v-if="!rows" class="loading">Loading stats…</p>
+      <div v-if="!rows" class="loading" aria-busy="true">
+        <p class="visually-hidden">Loading stats…</p>
+        <SkeletonBlock v-for="n in 7" :key="n" height="1.1rem" />
+      </div>
     </div>
   </div>
 </template>
@@ -92,6 +95,7 @@ import { useRoute, useRouter } from 'vue-router';
 import PokemonArtwork from '@/components/PokemonArtwork.vue';
 import TypeBadge from '@/components/TypeBadge.vue';
 import StatusMessage from '@/components/StatusMessage.vue';
+import SkeletonBlock from '@/components/SkeletonBlock.vue';
 import { getPokemon, type Pokemon } from '@/lib/api';
 import { MAX_STAT, STAT_LABELS } from '@/lib/format';
 import { filterPokedex, findById, findExact, formatNumber, type Species } from '@/lib/pokedex';
@@ -316,7 +320,8 @@ td.best .value::after {
 }
 
 .loading {
+  display: grid;
+  gap: 0.9rem;
   padding: 1rem;
-  color: var(--muted);
 }
 </style>
