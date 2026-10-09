@@ -3,7 +3,10 @@
     <img
       v-if="!failed"
       ref="image"
-      :src="artworkUrl(id, shiny)"
+      :src="fallback ? artworkUrl(id, shiny) : resizedArtworkUrl(id, size, shiny)"
+      :srcset="
+        fallback ? undefined : `${resizedArtworkUrl(id, size, shiny)} 1x, ${resizedArtworkUrl(id, size * 2, shiny)} 2x`
+      "
       :alt="alt"
       :width="size"
       :height="size"
@@ -11,7 +14,7 @@
       :fetchpriority="eager ? 'high' : undefined"
       decoding="async"
       @load="loaded = true"
-      @error="failed = true"
+      @error="onError"
     />
     <svg v-else viewBox="0 0 100 100" role="img" :aria-label="`${alt} (artwork not available)`">
       <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="6" />
@@ -23,7 +26,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, useTemplateRef, watch } from 'vue';
-import { artworkUrl } from '@/lib/pokedex';
+import { artworkUrl, resizedArtworkUrl } from '@/lib/pokedex';
 
 const props = withDefaults(
   defineProps<{ id: number; alt: string; shiny?: boolean; size?: number; eager?: boolean }>(),
@@ -36,6 +39,12 @@ const props = withDefaults(
 
 const loaded = ref(false);
 const failed = ref(false);
+// If the image CDN fails, try the original PNG once before showing the placeholder.
+const fallback = ref(false);
+const onError = () => {
+  if (fallback.value) failed.value = true;
+  else fallback.value = true;
+};
 const image = useTemplateRef('image');
 
 // Artwork already in the browser cache shows at once, without the fade (and in page transitions).
@@ -48,6 +57,7 @@ watch(
   () => {
     loaded.value = false;
     failed.value = false;
+    fallback.value = false;
   },
 );
 </script>

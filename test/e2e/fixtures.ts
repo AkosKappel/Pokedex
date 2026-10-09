@@ -20,9 +20,9 @@ export const mockApi = async (page: Page) => {
       return route.fulfill({ status: 404, body: 'Not Found' });
     }
   });
-  await page.route('https://raw.githubusercontent.com/**', route =>
-    route.fulfill({ contentType: 'image/png', body: PIXEL }),
-  );
+  for (const host of ['https://wsrv.nl/**', 'https://cdn.jsdelivr.net/**']) {
+    await page.route(host, route => route.fulfill({ contentType: 'image/png', body: PIXEL }));
+  }
 };
 
 export const test = base.extend<{ checkA11y: () => Promise<void> }>({

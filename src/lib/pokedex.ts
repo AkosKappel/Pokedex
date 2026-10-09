@@ -23,8 +23,20 @@ export const regionOf = (generation: number) => REGIONS[generation - 1];
 export const SORTS = { number: 'Number', name: 'Name', total: 'Strongest first' } as const;
 export type Sort = keyof typeof SORTS;
 
-const ARTWORK_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork';
+// jsDelivr serves the PokéAPI sprites repository with a week of browser caching (GitHub's raw files: 5 minutes).
+const ARTWORK_URL = 'https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork';
+/** Width of the official artwork PNGs. */
+export const ARTWORK_SIZE = 475;
+
+/** The original PNG, 115 to 200 kB. */
 export const artworkUrl = (id: number, shiny = false) => `${ARTWORK_URL}${shiny ? '/shiny' : ''}/${id}.png`;
+
+/**
+ * The artwork resized to `width` as WebP by the wsrv.nl image CDN: about 10 kB at 200 px and 25 kB at
+ * full size instead of 115 to 200 kB, cached for a year. Never enlarged beyond the original.
+ */
+export const resizedArtworkUrl = (id: number, width: number, shiny = false) =>
+  `https://wsrv.nl/?url=${encodeURIComponent(artworkUrl(id, shiny))}&w=${Math.min(width, ARTWORK_SIZE)}&output=webp`;
 
 export const formatNumber = (id: number) => `#${String(id).padStart(4, '0')}`;
 

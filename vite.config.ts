@@ -49,7 +49,7 @@ export default defineConfig({
             options: { cacheName: 'pokeapi', expiration: { maxEntries: 600, maxAgeSeconds: MONTH } },
           },
           {
-            urlPattern: ({ url }) => url.origin === 'https://raw.githubusercontent.com',
+            urlPattern: ({ url }) => ['https://wsrv.nl', 'https://cdn.jsdelivr.net'].includes(url.origin),
             handler: 'CacheFirst',
             options: {
               cacheName: 'artwork',

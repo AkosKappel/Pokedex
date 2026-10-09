@@ -26,7 +26,7 @@ export interface Item {
 export const loadItems = () => import('@/data/items.json').then(module => module.default as Item[]);
 
 export const itemSpriteUrl = (item: Item) =>
-  `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${item.slug}.png`;
+  `https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/items/${item.slug}.png`;
 
 export const filterItems = (
   items: Item[],

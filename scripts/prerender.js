@@ -5,7 +5,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 
 const SITE = 'https://akoskappel.github.io/Pokedex/';
-const ARTWORK = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork';
+const ARTWORK = 'https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork';
 const dist = new URL('../dist/', import.meta.url);
 
 const shell = await readFile(new URL('index.html', dist), 'utf8');
