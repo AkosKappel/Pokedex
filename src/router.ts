@@ -54,6 +54,12 @@ const router = createRouter({
       meta: { title: 'Compare Pokémon', description: 'Compare the base stats and types of up to three Pokémon.' },
     },
     {
+      path: '/quiz',
+      name: 'quiz',
+      component: () => import('@/views/QuizView.vue'),
+      meta: { title: "Who's that Pokémon?", description: 'Guess the Pokémon from its silhouette and build a streak.' },
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import('@/views/AboutView.vue'),

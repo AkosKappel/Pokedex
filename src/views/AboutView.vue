@@ -15,6 +15,7 @@
         <li>See base stats, abilities, height and weight, the evolution chain and other forms.</li>
         <li>Check which attack types are strong or weak against each Pokémon.</li>
         <li>Compare up to three Pokémon, switch to shiny artwork and play their cries.</li>
+        <li>Play “Who's that Pokémon?” and guess Pokémon from their silhouettes.</li>
         <li>
           Keep a list of favorites. Shortcuts: <kbd>/</kbd> jumps to search, <kbd>←</kbd> and <kbd>→</kbd> step through
           the Pokédex.

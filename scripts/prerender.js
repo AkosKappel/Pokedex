@@ -50,6 +50,11 @@ const pages = [
   },
   { path: 'favorites/', title: 'Favorites · Pokédex', description: 'Your favorite Pokémon, saved in this browser.' },
   {
+    path: 'quiz/',
+    title: "Who's that Pokémon? · Pokédex",
+    description: 'Guess the Pokémon from its silhouette and build a streak.',
+  },
+  {
     path: 'about/',
     title: 'About · Pokédex',
     description: 'What this Pokédex is, how it is built and where its data comes from.',

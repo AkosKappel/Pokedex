@@ -140,3 +140,21 @@ test('about page and dark theme pass accessibility checks', async ({ page, check
   await expect(page.getByRole('region', { name: 'Base stats' })).toBeVisible();
   await checkA11y();
 });
+
+test('quiz gives hints after a wrong guess and counts the streak', async ({ page, checkA11y }) => {
+  // Always pick the first Pokémon of the pool: Bulbasaur.
+  await page.addInitScript(() => (Math.random = () => 0));
+  await page.goto('quiz');
+  const guess = page.getByLabel('Your guess');
+  await guess.fill('Pikachu');
+  await page.getByRole('button', { name: 'Guess' }).click();
+  await expect(page.getByText('Not Pikachu. Try again.')).toBeVisible();
+  await expect(page.getByText('Type: Grass and Poison')).toBeVisible();
+  await checkA11y();
+
+  await guess.fill('bulbasaur');
+  await page.getByRole('button', { name: 'Guess' }).click();
+  await expect(page.getByText("Correct, it's Bulbasaur!")).toBeVisible();
+  await expect(page.getByRole('definition').first()).toHaveText('1');
+  await expect(page.getByRole('button', { name: 'Next Pokémon' })).toBeFocused();
+});

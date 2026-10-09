@@ -10,6 +10,7 @@
         <div class="intro-actions">
           <RouterLink :to="{ name: 'browse' }" class="button primary">Browse all Pokémon</RouterLink>
           <button type="button" class="button" @click="openRandom">Surprise me</button>
+          <RouterLink :to="{ name: 'quiz' }" class="button">Play Who's that Pokémon?</RouterLink>
         </div>
       </div>
 

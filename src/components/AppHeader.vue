@@ -13,6 +13,7 @@
           Favorites<span v-if="favoriteCount" class="count">{{ favoriteCount }}</span>
         </RouterLink>
         <RouterLink :to="{ name: 'compare' }">Compare</RouterLink>
+        <RouterLink :to="{ name: 'quiz' }">Quiz</RouterLink>
         <RouterLink :to="{ name: 'about' }">About</RouterLink>
       </nav>
 
