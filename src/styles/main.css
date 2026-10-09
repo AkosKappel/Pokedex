@@ -211,6 +211,14 @@ input[type='search']::-webkit-search-decoration {
   list-style: none;
 }
 
+/* Two cards per row on phones instead of one very large one. */
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
