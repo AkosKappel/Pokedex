@@ -9,13 +9,14 @@
         You have no favorite Pokémons yet.<br />
         Go to the <router-link :to="{ name: 'pokemons' }">Pokémon</router-link> page to add some.
       </p>
-      <img :src="require('@/assets/pokeball.png')" alt="Pokeball" loading="lazy" />
+      <img :src="pokeball" alt="Pokeball" loading="lazy" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import pokeball from '@/assets/pokeball.png';
 import LoadingWidget from '@/components/LoadingWidget.vue';
 import PokemonList from '@/components/PokemonList.vue';
 import { fetchPokemonById, type Pokemon } from '@/utils/helpers';

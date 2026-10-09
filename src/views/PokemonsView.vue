@@ -8,14 +8,7 @@
       @left="currentPage--"
       @right="currentPage++"
     />
-    <vue-awesome-paginate
-      v-model="currentPage"
-      :total-items="data.count"
-      :items-per-page="POKEMONS_PER_PAGE"
-      :max-pages-shown="3"
-      :hide-prev-next-when-ends="true"
-      active-page-class="active-page"
-    />
+    <AppPagination v-model="currentPage" :total-pages="totalPages" />
   </div>
 </template>
 
@@ -25,6 +18,7 @@ import { useRouter } from 'vue-router';
 import LoadingWidget from '@/components/LoadingWidget.vue';
 import PokemonList from '@/components/PokemonList.vue';
 import SideNavigation from '@/components/SideNavigation.vue';
+import AppPagination from '@/components/AppPagination.vue';
 import { POKEMONS_PER_PAGE } from '@/config/constants';
 import { fetchPokemonList } from '@/utils/helpers';
 

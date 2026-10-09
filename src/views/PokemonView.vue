@@ -24,13 +24,12 @@ import { useRoute, useRouter } from 'vue-router';
 import LoadingWidget from '@/components/LoadingWidget.vue';
 import PokemonDetails from '@/components/PokemonDetails.vue';
 import SideNavigation from '@/components/SideNavigation.vue';
-import { fetchPokemonById } from '@/utils/helpers';
+import { fetchPokemonById, type Pokemon } from '@/utils/helpers';
 import BackButton from '@/components/BackButton.vue';
-import ToTopButton from '@/components/ToTopButton.vue';
 
 const route = useRoute();
 const router = useRouter();
-const pokemon = ref(null);
+const pokemon = ref<Pokemon | null>(null);
 const loading = ref(true);
 const pokemonId = computed(() => parseInt(route.params.id as string, 10));
 

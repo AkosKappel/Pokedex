@@ -29,6 +29,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import pokeball from '@/assets/pokeball.png';
 
 interface Pokemon {
   id: string;
@@ -65,7 +66,7 @@ const onImageLoad = (event: Event) => {
 };
 
 const onImageError = (event: Event) => {
-  (event.target as HTMLImageElement).src = require('@/assets/pokeball.png');
+  (event.target as HTMLImageElement).src = pokeball;
 };
 
 onMounted(() => {
@@ -169,7 +170,7 @@ a {
   width: 100%;
   height: auto;
   cursor: pointer;
-  background-image: url('~@/assets/pokeball.png');
+  background-image: url('@/assets/pokeball.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;

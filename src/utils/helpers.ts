@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ref } from 'vue';
 import { POKEMON_API_URL, POKEMON_IMAGE_URL } from '../config/constants';
 
@@ -24,9 +23,11 @@ export const useFetch = async (url: string, useCache: boolean = true) => {
   const cached = cache.value[url];
   if (useCache && cached) return cached;
 
-  const response = await axios.get(url);
-  cache.value[url] = response.data;
-  return response.data;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Request failed: ${response.status} ${url}`);
+  const data = await response.json();
+  cache.value[url] = data;
+  return data;
 };
 
 export const clearCache = () => {

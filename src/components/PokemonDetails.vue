@@ -64,6 +64,7 @@
 </template>
 
 <script setup lang="ts">
+import pokeball from '@/assets/pokeball.png';
 interface Pokemon {
   id: number;
   name: string;
@@ -96,7 +97,7 @@ const props = defineProps({
 const pokemon = props.pokemon as Pokemon;
 
 const onImageError = (event: any) => {
-  event.target.src = require('@/assets/pokeball.png');
+  event.target.src = pokeball;
 };
 
 const removeSprite = (event: any) => {

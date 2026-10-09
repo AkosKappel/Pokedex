@@ -14,19 +14,19 @@
           <p>Built with cutting-edge technologies to ensure a smooth, responsive experience:</p>
           <div class="tech-badges">
             <a href="https://v3.vuejs.org/" target="_blank" rel="noopener noreferrer" class="tech-badge">
-              Vue 3 <img src="/pokevue/vue.svg" alt="Vue logo" class="svg-logo" />
+              Vue 3 <img :src="`${base}vue.svg`" alt="Vue logo" class="svg-logo" />
             </a>
             <a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer" class="tech-badge">
-              TypeScript <img src="/pokevue/typescript.svg" alt="TypeScript logo" class="svg-logo" />
+              TypeScript <img :src="`${base}typescript.svg`" alt="TypeScript logo" class="svg-logo" />
             </a>
             <a href="https://www.docker.com/" target="_blank" rel="noopener noreferrer" class="tech-badge">
-              Docker <img src="/pokevue/docker.svg" alt="Docker logo" class="svg-logo" />
+              Docker <img :src="`${base}docker.svg`" alt="Docker logo" class="svg-logo" />
             </a>
           </div>
           <p class="api-info">
             Powered by the comprehensive
             <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer">
-              PokéAPI <img src="/pokevue/favicon.ico" alt="PokeAPI logo" class="svg-logo" />
+              PokéAPI <img :src="`${base}favicon.ico`" alt="PokeAPI logo" class="svg-logo" />
             </a>
           </p>
         </div>
@@ -67,7 +67,7 @@
               <p>
                 Deployed in a containerized environment using
                 <a href="https://www.docker.com/" target="_blank" rel="noopener noreferrer">
-                  Docker <img src="/pokevue/docker.svg" alt="Docker logo" class="svg-logo" />
+                  Docker <img :src="`${base}docker.svg`" alt="Docker logo" class="svg-logo" />
                 </a>
                 on Oracle Cloud Infrastructure for optimal performance and reliability.
               </p>
@@ -98,6 +98,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+
+const base = import.meta.env.BASE_URL;
 import PokemonCard from '@/components/PokemonCard.vue';
 import { fetchRandomPokemons, type Pokemon } from '@/utils/helpers';
 
