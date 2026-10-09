@@ -3,10 +3,23 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/favicon.ico" />
-    <title>Pokédex</title>
+    <title>Pokédex: every Pokémon at a glance</title>
+    <meta
+      name="description"
+      content="Browse all 1025 Pokémon: search by name or number, filter by type and region, and see stats, evolutions and type matchups."
+    />
+    <meta name="theme-color" content="#dc0a2d" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>
+      // Apply a saved theme before the first paint.
+      try {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
   </head>
   <body>
+    <noscript>This Pokédex needs JavaScript to run.</noscript>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

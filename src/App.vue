@@ -1,73 +1,33 @@
 <template>
-  <AppHeader :title="name" />
-  <router-view class="container" />
-  <AppFooter :title="name" />
+  <a class="skip-link" href="#main">Skip to content</a>
+  <AppHeader />
+  <main id="main" tabindex="-1">
+    <RouterView />
+  </main>
+  <AppFooter />
 </template>
 
 <script setup lang="ts">
 import AppHeader from '@/components/AppHeader.vue';
 import AppFooter from '@/components/AppFooter.vue';
-
-const name = 'Pokédex';
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #466483;
+<style scoped>
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-s);
+  background: var(--panel);
 }
 
-.container {
-  min-height: 90vh;
-  margin: 0 auto;
+.skip-link:focus {
+  top: 1rem;
 }
 
-body {
-  margin: 0;
-  background-color: #f4f2de;
-}
-
-.pagination-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0.5rem 0 2rem 0;
-  column-gap: 10px;
-}
-
-.paginate-buttons {
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  background-color: #5c82a9;
-  color: #fff;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
-  font-weight: 700;
-  border: none;
-}
-
-.paginate-buttons:hover {
-  background-color: #466483;
-  color: #f1c40f;
-}
-
-.active-page {
-  background-color: #466483;
-  color: #f1c40f;
-}
-
-@media (max-width: 768px) {
-  .pagination-container {
-    margin: 0.5rem 0 1rem 0;
-  }
-
-  .paginate-buttons {
-    height: 30px;
-    width: 30px;
-  }
+main:focus {
+  outline: none;
 }
 </style>
