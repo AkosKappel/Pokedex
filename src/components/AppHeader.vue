@@ -44,6 +44,7 @@
           </svg>
           <span v-if="favoriteCount" class="count" aria-hidden="true">{{ favoriteCount }}</span>
         </RouterLink>
+        <CommandPalette />
         <LanguagePicker />
         <ThemeToggle />
       </div>
@@ -58,6 +59,7 @@ import AppLogo from './AppLogo.vue';
 import ThemeToggle from './ThemeToggle.vue';
 import HeaderPopover from './HeaderPopover.vue';
 import LanguagePicker from './LanguagePicker.vue';
+import CommandPalette from './CommandPalette.vue';
 import { useRoute } from 'vue-router';
 import { useFavorites } from '@/lib/favorites';
 
@@ -183,6 +185,7 @@ nav .router-link-active :deep(.popover-button) {
 }
 
 .icon-link,
+.tools :deep(.palette-button),
 .tools :deep(.popover-button) {
   position: relative;
   display: inline-flex;
@@ -200,6 +203,7 @@ nav .router-link-active :deep(.popover-button) {
 
 .icon-link:hover,
 .icon-link.router-link-active,
+.tools :deep(.palette-button):hover,
 .tools :deep(.popover-button):hover {
   border-color: #fff;
 }
@@ -216,6 +220,7 @@ nav .router-link-active :deep(.popover-button) {
 }
 
 .tools :deep(.popover-button):focus-visible,
+.tools :deep(.palette-button):focus-visible,
 .icon-link:focus-visible,
 nav a:focus-visible,
 nav :deep(.popover-button):focus-visible {
