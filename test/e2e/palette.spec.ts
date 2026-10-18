@@ -5,7 +5,7 @@ test('quick find opens a Pokémon from the keyboard', async ({ page, checkA11y }
   await page.keyboard.press('ControlOrMeta+k');
 
   const dialog = page.getByRole('dialog', { name: 'Quick find' });
-  const input = dialog.getByRole('combobox', { name: 'Page, type, region or Pokémon' });
+  const input = dialog.getByRole('combobox', { name: 'Find a page or Pokémon' });
   await expect(input).toBeFocused();
   await expect(dialog.getByRole('option')).toHaveCount(10);
   await checkA11y();

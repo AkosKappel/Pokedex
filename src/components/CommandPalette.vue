@@ -27,7 +27,7 @@
         <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2.4" />
         <path d="m16.5 16.5 4.5 4.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
       </svg>
-      <span class="visually-hidden">Page, type, region or Pokémon</span>
+      <span class="visually-hidden">Find a page or Pokémon</span>
       <input
         v-model="query"
         type="search"
