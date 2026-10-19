@@ -32,6 +32,21 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./dist
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
       - if: ${{ failure() }}
@@ -39,22 +54,44 @@ jobs:
         with:
           name: playwright-traces
           path: test-results/
-      # Desktop Lighthouse against the live PokéAPI: performance 85 (API and artwork latency vary),
-      # accessibility, best practices and SEO 100.
-      - run: npm run lighthouse
+
+  # Desktop Lighthouse against the live PokéAPI: performance 85 (API and artwork latency vary),
+  # accessibility, best practices and SEO 100. The pages are split into two shards that
+  # override the URL list in lighthouserc.json.
+  lighthouse:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - shard: 1
+            pages: / /pokemon/ /pokemon/25/ /compare/?ids=1,4,7 /moves/
+          - shard: 2
+            pages: /moves/85/ /items/ /team/?ids=6,9,3 /about/
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: npm run lighthouse
+        run: |
+          # The query strings contain `?`, which must not be expanded as a glob.
+          set -f
+          urls=()
+          for page in ${{ matrix.pages }}; do urls+=("--collect.url=http://localhost:4175/Pokedex$page"); done
+          npm run lighthouse -- "${urls[@]}"
       - if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
-          name: lighthouse-report
+          name: lighthouse-report-${{ matrix.shard }}
           path: lighthouse-report/
-      - if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: ./dist
 
   deploy:
     if: ${{ github.event_name != 'pull_request' }}
-    needs: build
+    needs: [build, e2e, lighthouse]
     runs-on: ubuntu-latest
     environment:
       name: github-pages

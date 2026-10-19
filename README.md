@@ -73,7 +73,7 @@ The app runs at http://localhost:5173/Pokedex/.
 
 ## Deployment
 
-Every push to `main` runs `.github/workflows/deploy.yml`: format check, lint, type check, unit tests, build, end-to-end tests and Lighthouse, then deploys `dist/` to GitHub Pages.
+Every push to `main` runs `.github/workflows/deploy.yml`. Three jobs run in parallel: format check, lint, type check, unit tests and build; end-to-end tests; and Lighthouse in two shards. `dist/` deploys to GitHub Pages only when all of them pass.
 
 GitHub Pages serves static files only. `scripts/prerender.js` writes an HTML file for each route (all 1025 Pokémon, 833 moves and 306 abilities) with its own title, description and link preview, plus `404.html` as the single-page-app fallback, `sitemap.xml` and `robots.txt`.
 
