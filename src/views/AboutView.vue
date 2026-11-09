@@ -11,19 +11,38 @@
     <section>
       <h2>What you can do</h2>
       <ul>
-        <li>Search all {{ POKEDEX.length }} Pokémon by name or number, and filter by type and region.</li>
-        <li>See base stats, abilities, height and weight, the evolution chain and other forms.</li>
-        <li>Check which attack types are strong or weak against each Pokémon.</li>
-        <li>Compare up to three Pokémon, switch to shiny artwork and play their cries.</li>
-        <li>Play “Who's that Pokémon?” and guess Pokémon from their silhouettes.</li>
-        <li>Look up moves, abilities and items, and see which Pokémon learn or have them.</li>
-        <li>Build a team of six and check its shared weaknesses and attack coverage.</li>
         <li>
-          Show Pokémon, move, ability and item names in German, French, Spanish, Italian, Japanese, Korean or Chinese.
+          Search all {{ POKEDEX.length }} Pokémon by name or number, filter by type and region, and sort by number, name
+          or base stats. Every search and filter lives in the address, so any view can be shared.
         </li>
         <li>
-          Keep a list of favorites, sort and filter it, share it as a link or export it as a file. Shortcuts:
-          <kbd>/</kbd> jumps to search, <kbd>←</kbd> and <kbd>→</kbd> step through the Pokédex.
+          See base stats, abilities, height and weight, the evolution chain, other forms and the moves each Pokémon
+          learns. Switch to shiny artwork, play its cry and share the page.
+        </li>
+        <li>Check which attack types are strong or weak against each Pokémon.</li>
+        <li>Meet a new Pokémon of the day on the home page.</li>
+        <li>Compare up to three Pokémon side by side.</li>
+        <li>Play “Who's that Pokémon?” and guess Pokémon from their silhouettes.</li>
+        <li>Look up moves, abilities and items, and see which Pokémon learn or have them.</li>
+        <li>
+          Build a team of six and check its shared weaknesses and attack coverage. The team builder points out the gaps
+          (types nobody hits hard, weaknesses nobody resists) and suggests Pokémon that fill them, by region if you
+          like. Share the team as a link.
+        </li>
+        <li>
+          Keep a list of favorites, sort and filter it, share it as a link, and export or import it as a file to move it
+          to another browser.
+        </li>
+        <li>
+          Show Pokémon, move, ability and item names in English, German, French, Spanish, Italian, Japanese, Korean,
+          Simplified or Traditional Chinese. Search accepts names in the chosen language.
+        </li>
+        <li>Switch between light and dark mode.</li>
+        <li>Install the app and use it offline: Pokémon you have opened stay available without a connection.</li>
+        <li>
+          Keyboard shortcuts: <kbd>Ctrl</kbd> <kbd>K</kbd> (<kbd>⌘</kbd> <kbd>K</kbd> on a Mac) opens quick find for
+          pages, types, regions and Pokémon, <kbd>/</kbd> jumps to search, <kbd>←</kbd> and <kbd>→</kbd> step through
+          the Pokédex.
         </li>
       </ul>
     </section>
@@ -37,8 +56,8 @@
         your browser for later visits.
       </p>
       <p>
-        Favorites, your team, the theme, the language and the cached data stay in your browser. Nothing is sent
-        anywhere, and there are no accounts, cookies or trackers.
+        Favorites, your team, the theme, the language, your best quiz streak and the cached data stay in your browser.
+        Nothing is sent anywhere, and there are no accounts, cookies or trackers.
       </p>
     </section>
 
@@ -78,7 +97,8 @@
           <dt>2026</dt>
           <dd>
             Rebuilt with Vite and a new design: search, filters, type matchups, evolutions, compare, dark mode and
-            offline support. Then moves, abilities, items, a team builder and eight more languages.
+            offline support. Then moves, abilities, items, a team builder that suggests Pokémon for its gaps, quick find
+            and eight more languages.
           </dd>
         </div>
         <div>
