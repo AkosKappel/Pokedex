@@ -3,13 +3,13 @@
     <div class="inner">
       <div class="author">
         <p>
-          Built by <a href="https://portfolio-taupe-eta-51.vercel.app/">Ákos Kappel</a>, {{ year }}.
+          Built by <a href="https://akoskappel.dev/">Ákos Kappel</a>, {{ year }}.
           <a href="https://github.com/AkosKappel/Pokedex">Source code</a> on GitHub.
         </p>
         <ul class="links">
           <li><a href="https://github.com/AkosKappel">GitHub</a></li>
           <li><a href="https://www.linkedin.com/in/%C3%A1kos-kappel-b53344220/">LinkedIn</a></li>
-          <li><a href="https://portfolio-taupe-eta-51.vercel.app/">Portfolio</a></li>
+          <li><a href="https://akoskappel.dev/">Portfolio</a></li>
         </ul>
       </div>
       <p class="credits">
