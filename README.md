@@ -3,7 +3,7 @@
 [![Test and deploy](https://github.com/AkosKappel/Pokedex/actions/workflows/deploy.yml/badge.svg)](https://github.com/AkosKappel/Pokedex/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A fast Pokédex for all 1025 Pokémon. Search by name or number, filter by type and region, and see each Pokémon's stats, type matchups, evolution chain, moves and other forms. Moves, abilities and items have their own pages, and a team builder checks a team of six for shared weaknesses.
+A fast Pokédex for all 1025 Pokémon. Search by name or number, filter by type and region, and see each Pokémon's stats, type matchups, evolution chain, moves and other forms. Moves, abilities and items have their own pages, and a team builder checks a team of six for shared weaknesses and suggests Pokémon that fill its gaps.
 
 **Live demo:** https://akoskappel.github.io/Pokedex/
 
@@ -19,7 +19,7 @@ A fast Pokédex for all 1025 Pokémon. Search by name or number, filter by type 
 - **Browse** with type filters (up to two), region filter and sorting by number, name or base stat total. Filters and pages live in the URL, so every view can be shared.
 - **Pokémon pages** with artwork (normal and shiny), description, height and weight, abilities, base stats, weaknesses and resistances, evolution chain with conditions, moves by learn method, other forms, cries and sharing.
 - **Moves, abilities and items**: searchable lists with filters, a page per move and ability listing the Pokémon that learn or have it, and item details in a dialog.
-- **Team builder** for six Pokémon: shared weaknesses, attack coverage and a table per attack type. Shareable by URL.
+- **Team builder** for six Pokémon: shared weaknesses, attack coverage, a table per attack type, a summary of the gaps and up to three suggested Pokémon that close them (filterable by region). Shareable by URL.
 - **Languages**: Pokémon, move, ability and item names (and Pokémon descriptions) in English, German, French, Spanish, Italian, Japanese, Korean and Chinese. Search accepts names in the chosen language.
 - **Compare** up to three Pokémon side by side.
 - **Favorites** saved in the browser: filter, sort (number, name, recently added), share as a link, export and import as JSON.

@@ -67,6 +67,67 @@
         <h2 id="analysis-heading">Analysis</h2>
 
         <div class="block">
+          <h3>Gaps</h3>
+          <p v-if="!open.offence.length && !open.defence.length" class="muted">
+            No gaps: your members' types hit every type super effectively, and every shared weakness is resisted.
+          </p>
+          <template v-else>
+            <template v-if="open.offence.length">
+              <p class="muted">No member's type hits these super effectively:</p>
+              <ul class="chips">
+                <li v-for="type in open.offence" :key="type"><TypeBadge :type="type" compact /></li>
+              </ul>
+            </template>
+            <template v-if="open.defence.length">
+              <p class="muted">Two or more members are weak to these, and nobody resists them:</p>
+              <ul class="chips">
+                <li v-for="type in open.defence" :key="type"><TypeBadge :type="type" compact /></li>
+              </ul>
+            </template>
+          </template>
+        </div>
+
+        <div v-if="team.length < TEAM_SIZE && (open.offence.length || open.defence.length)" class="block">
+          <h3 id="suggestions-heading">Suggestions</h3>
+          <label class="generation">
+            Generation
+            <select v-model.number="generation" class="field">
+              <option :value="0">All regions</option>
+              <option v-for="(region, index) in REGIONS" :key="region" :value="index + 1">{{ region }}</option>
+            </select>
+          </label>
+          <p v-if="!picks.length" class="muted">
+            No Pokémon from this region closes a gap without a new shared weakness.
+          </p>
+          <ul v-else class="picks" aria-labelledby="suggestions-heading">
+            <li v-for="{ species, hits, resists } in picks" :key="species.id" class="pick">
+              <PokemonArtwork
+                :id="species.id"
+                alt=""
+                :size="64"
+                class="pick-art"
+                :style="{ '--type': `var(--${species.types[0]})` }"
+              />
+              <div class="pick-info">
+                <RouterLink :to="{ name: 'pokemon', params: { id: species.id } }" class="name" :lang="lang">
+                  {{ speciesName(species) }}
+                </RouterLink>
+                <span class="types">
+                  <TypeBadge v-for="type in species.types" :key="type" :type="type" compact />
+                </span>
+                <span class="muted fills">
+                  <template v-if="hits.length">Hits {{ hits.map(titleCase).join(', ') }}.</template>
+                  <template v-if="resists.length"> Resists {{ resists.map(titleCase).join(', ') }}.</template>
+                </span>
+              </div>
+              <button type="button" class="button" @click="setIds([...ids, species.id])">
+                Add<span class="visually-hidden"> {{ speciesName(species) }}</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="block">
           <h3>Shared weaknesses</h3>
           <p v-if="!weaknesses.length" class="muted">No attack type hits more than one member hard. Nicely balanced.</p>
           <ul v-else class="chips">
@@ -82,12 +143,6 @@
           <ul class="chips">
             <li v-for="type in reach.covered" :key="type"><TypeBadge :type="type" compact /></li>
           </ul>
-          <template v-if="reach.uncovered.length">
-            <p class="muted">Not covered:</p>
-            <ul class="chips">
-              <li v-for="type in reach.uncovered" :key="type"><TypeBadge :type="type" compact /></li>
-            </ul>
-          </template>
         </div>
 
         <div class="block">
@@ -133,8 +188,9 @@ import { useRoute, useRouter } from 'vue-router';
 import PokemonArtwork from '@/components/PokemonArtwork.vue';
 import TypeBadge from '@/components/TypeBadge.vue';
 import StatusMessage from '@/components/StatusMessage.vue';
-import { filterPokedex, findById, findExact, type Species } from '@/lib/pokedex';
-import { coverage, defence, sharedWeaknesses, TEAM_SIZE } from '@/lib/team';
+import { filterPokedex, findById, findExact, REGIONS, type Species } from '@/lib/pokedex';
+import { coverage, defence, gaps, sharedWeaknesses, suggest, TEAM_SIZE } from '@/lib/team';
+import { titleCase } from '@/lib/format';
 import { readTeam, saveTeam } from '@/lib/teamStore';
 import { useLanguage } from '@/lib/language';
 
@@ -181,6 +237,9 @@ const add = () => {
 const rows = computed(() => defence(team.value));
 const weaknesses = computed(() => sharedWeaknesses(team.value));
 const reach = computed(() => coverage(team.value));
+const open = computed(() => gaps(team.value));
+const generation = ref(0);
+const picks = computed(() => suggest(team.value, { generation: generation.value }));
 
 const notice = ref('');
 const share = async () => {
@@ -324,6 +383,42 @@ const share = async () => {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.generation {
+  display: grid;
+  gap: 0.3rem;
+  justify-self: start;
+  font-weight: 500;
+}
+
+.picks {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pick {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.pick-art {
+  border-radius: var(--radius-s);
+  background: color-mix(in oklab, var(--type) 16%, var(--paper));
+}
+
+.pick-info {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.fills {
+  font-size: 0.85rem;
 }
 
 .defence {

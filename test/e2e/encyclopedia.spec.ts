@@ -93,6 +93,21 @@ test('the team builder finds shared weaknesses and remembers the team', async ({
   await expect(page).toHaveURL(/ids=9,3,25/);
 });
 
+test('the team builder shows its gaps and adds a suggested Pokémon', async ({ page, checkA11y }) => {
+  await page.goto('team?ids=25,25');
+  const gaps = page.getByRole('heading', { name: 'Gaps' }).locator('..');
+  await expect(gaps).toContainText('nobody resists');
+  await expect(gaps).toContainText('Ground');
+
+  await page.getByLabel('Generation').selectOption({ label: 'Kanto' });
+  const pick = page.getByRole('list', { name: 'Suggestions' }).getByRole('listitem').first();
+  const name = await pick.getByRole('link').innerText();
+  await pick.getByRole('button', { name: `Add ${name}` }).click();
+  await expect(page).toHaveURL(/ids=25,25,\d+$/);
+  await expect(page.getByRole('button', { name: `Remove ${name}` })).toBeVisible();
+  await checkA11y();
+});
+
 test('Pokémon data can be shown in Japanese', async ({ page, checkA11y }) => {
   await page.goto('pokemon/25');
   await page.getByRole('button', { name: /Pokémon names: English/ }).click();
