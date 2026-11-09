@@ -112,8 +112,7 @@
       <h2>Author</h2>
       <p>
         Ákos Kappel, software developer.
-        <a href="https://akoskappel.dev/">Portfolio</a>,
-        <a href="https://github.com/AkosKappel">GitHub</a> and
+        <a href="https://akoskappel.dev/">Portfolio</a>, <a href="https://github.com/AkosKappel">GitHub</a> and
         <a href="https://www.linkedin.com/in/%C3%A1kos-kappel-b53344220/">LinkedIn</a>.
       </p>
     </section>
