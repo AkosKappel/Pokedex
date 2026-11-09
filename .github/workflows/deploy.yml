@@ -22,16 +22,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 12
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm run format:check
-      - run: npm run lint
-      - run: npm run typecheck
-      - run: npm test
-      - run: npm run build
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
       - if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-pages-artifact@v5
         with:
@@ -41,14 +44,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 12
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm run build
-      - run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
       - if: ${{ failure() }}
         uses: actions/upload-artifact@v7
         with:
@@ -70,19 +76,22 @@ jobs:
             pages: /moves/85/ /items/ /team/?ids=6,9,3 /about/
     steps:
       - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 12
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm run build
-      - name: npm run lighthouse
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: pnpm lighthouse
         run: |
           # The query strings contain `?`, which must not be expanded as a glob.
           set -f
           urls=()
           for page in ${{ matrix.pages }}; do urls+=("--collect.url=http://localhost:4175/Pokedex$page"); done
-          npm run lighthouse -- "${urls[@]}"
+          pnpm lighthouse "${urls[@]}"
       - if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:

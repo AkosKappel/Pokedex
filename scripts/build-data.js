@@ -1,6 +1,6 @@
 // Snapshots the PokéAPI data that lists, search and filters need into src/data/, so pages work
 // without a request per entry. The data changes only when new games are released.
-// Run with `npm run data`.
+// Run with `pnpm data`.
 //
 //   pokedex.json        every species: number, English name, generation, types, base stat total
 //   moves.json          moves that at least one Pokémon learns

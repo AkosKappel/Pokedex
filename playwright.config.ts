@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-// End-to-end tests run against the production build (`npm run build` first),
+// End-to-end tests run against the production build (`pnpm build` first),
 // with PokéAPI served from test/e2e/fixtures.
 export default defineConfig({
   testDir: 'test/e2e',
