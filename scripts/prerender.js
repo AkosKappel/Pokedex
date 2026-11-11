@@ -4,7 +4,7 @@
 // Also writes 404.html (the SPA fallback for anything else), sitemap.xml and robots.txt.
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 
-const SITE = 'https://akoskappel.github.io/Pokedex/';
+const SITE = 'https://pokedex.akoskappel.dev/';
 const ARTWORK = 'https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork';
 const dist = new URL('../dist/', import.meta.url);
 

@@ -5,7 +5,7 @@
 
 A fast Pokédex for all 1025 Pokémon. Search by name or number, filter by type and region, and see each Pokémon's stats, type matchups, evolution chain, moves and other forms. Moves, abilities and items have their own pages, and a team builder checks a team of six for shared weaknesses and suggests Pokémon that fill its gaps.
 
-**Live demo:** https://akoskappel.github.io/Pokedex/
+**Live demo:** https://pokedex.akoskappel.dev/
 
 ![Home page](screenshots/home.png)
 
@@ -54,7 +54,7 @@ pnpm install
 pnpm dev
 ```
 
-The app runs at http://localhost:5173/Pokedex/.
+The app runs at http://localhost:5173/.
 
 ## Scripts
 

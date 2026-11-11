@@ -10,7 +10,7 @@ const versionOf = (name: string) =>
 const MONTH = 60 * 60 * 24 * 30;
 
 export default defineConfig({
-  base: '/Pokedex/',
+  base: '/',
   define: {
     __VERSIONS__: JSON.stringify({
       vue: versionOf('vue'),

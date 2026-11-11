@@ -10,7 +10,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
-    baseURL: 'http://localhost:4174/Pokedex/',
+    baseURL: 'http://localhost:4174/',
     trace: 'retain-on-failure',
     // Requests from a service worker bypass page.route, so keep it out of the tests.
     serviceWorkers: 'block',
@@ -21,7 +21,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'npx vite preview --port 4174 --strictPort',
-    url: 'http://localhost:4174/Pokedex/',
+    url: 'http://localhost:4174/',
     reuseExistingServer: !process.env.CI,
   },
 });

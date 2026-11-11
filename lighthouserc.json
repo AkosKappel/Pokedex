@@ -4,15 +4,15 @@
       "startServerCommand": "pnpm exec vite preview --port 4175 --strictPort",
       "startServerReadyPattern": "Local",
       "url": [
-        "http://localhost:4175/Pokedex/",
-        "http://localhost:4175/Pokedex/pokemon/",
-        "http://localhost:4175/Pokedex/pokemon/25/",
-        "http://localhost:4175/Pokedex/compare/?ids=1,4,7",
-        "http://localhost:4175/Pokedex/moves/",
-        "http://localhost:4175/Pokedex/moves/85/",
-        "http://localhost:4175/Pokedex/items/",
-        "http://localhost:4175/Pokedex/team/?ids=6,9,3",
-        "http://localhost:4175/Pokedex/about/"
+        "http://localhost:4175/",
+        "http://localhost:4175/pokemon/",
+        "http://localhost:4175/pokemon/25/",
+        "http://localhost:4175/compare/?ids=1,4,7",
+        "http://localhost:4175/moves/",
+        "http://localhost:4175/moves/85/",
+        "http://localhost:4175/items/",
+        "http://localhost:4175/team/?ids=6,9,3",
+        "http://localhost:4175/about/"
       ],
       "numberOfRuns": 3,
       "settings": {

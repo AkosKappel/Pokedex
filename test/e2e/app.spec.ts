@@ -191,7 +191,7 @@ test('favorites can be filtered, sorted, shared, exported and imported', async (
 
   await page.getByRole('button', { name: 'Share list' }).click();
   await expect(page.getByText('Link copied.')).toBeVisible();
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toMatch(/\/Pokedex\/favorites\?ids=25,1,6$/);
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toMatch(/\/favorites\?ids=25,1,6$/);
 
   const [download] = await Promise.all([
     page.waitForEvent('download'),

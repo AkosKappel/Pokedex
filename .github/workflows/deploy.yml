@@ -90,7 +90,7 @@ jobs:
           # The query strings contain `?`, which must not be expanded as a glob.
           set -f
           urls=()
-          for page in ${{ matrix.pages }}; do urls+=("--collect.url=http://localhost:4175/Pokedex$page"); done
+          for page in ${{ matrix.pages }}; do urls+=("--collect.url=http://localhost:4175$page"); done
           pnpm lighthouse "${urls[@]}"
       - if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
