@@ -7,6 +7,8 @@ A fast Pokédex for all 1025 Pokémon. Search by name or number, filter by type 
 
 **Live demo:** https://pokedex.akoskappel.dev/
 
+**Case study:** [akoskappel.dev/projects/pokedex](https://akoskappel.dev/projects/pokedex)
+
 ![Home page](screenshots/home.png)
 
 | Pokémon page                                 | Browse in dark mode                                             |
