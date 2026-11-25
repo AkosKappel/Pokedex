@@ -155,8 +155,8 @@ h1 {
   width: min(100%, 18rem);
 }
 
+/* Full text colour: the card is tinted by the Pokémon's type, and muted grey fails contrast on dark types. */
 .featured-number {
-  color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
 
